@@ -1,0 +1,1092 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+{{ profissional.nome_completo }}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+<!-- CABEÇALHO -->
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+
+    <div class="d-flex align-items-center gap-3">
+
+
+        <div
+            class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center fw-bold"
+            style="width: 68px; height: 68px; font-size: 28px;"
+        >
+
+            {{ profissional.nome_completo|first|upper }}
+
+        </div>
+
+
+        <div>
+
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+
+                <h2 class="fw-bold mb-1">
+
+                    {{ profissional.nome_completo }}
+
+                </h2>
+
+
+                {% if profissional.ativo %}
+
+                    <span class="badge bg-success-subtle text-success">
+
+                        Ativo
+
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-danger-subtle text-danger">
+
+                        Inativo
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <p class="text-muted mb-0">
+
+                {{ profissional.get_especialidade_display }}
+
+                {% if profissional.registro_profissional %}
+
+                    ·
+
+                    {{ profissional.registro_profissional }}
+
+                {% endif %}
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="d-flex gap-2 flex-wrap">
+
+        <a
+            href="{% url 'profissionais:editar' profissional.pk %}"
+            class="btn btn-primary px-4"
+        >
+
+            ✏️ Editar
+
+        </a>
+
+
+        <a
+            href="{% url 'profissionais:lista' %}"
+            class="btn btn-outline-secondary px-4"
+        >
+
+            ← Voltar
+
+        </a>
+
+    </div>
+
+</div>
+
+
+
+<!-- RESUMO -->
+
+<div class="row g-4 mb-4">
+
+
+    <!-- ESPECIALIDADE -->
+
+    <div class="col-sm-6 col-lg-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <div class="text-muted small mb-2">
+
+                    🩺 Especialidade
+
+                </div>
+
+                <h5 class="fw-bold mb-1">
+
+                    {{ profissional.get_especialidade_display }}
+
+                </h5>
+
+                <small class="text-muted">
+
+                    Área de atuação
+
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- SERVIÇOS -->
+
+    <div class="col-sm-6 col-lg-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <div class="text-muted small mb-2">
+
+                    📋 Serviços
+
+                </div>
+
+                <h4 class="fw-bold mb-1">
+
+                    {{ profissional.servicos_configurados.all|length }}
+
+                </h4>
+
+                <small class="text-muted">
+
+                    Serviços configurados
+
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- TELEFONE -->
+
+    <div class="col-sm-6 col-lg-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <div class="text-muted small mb-2">
+
+                    📞 Telefone
+
+                </div>
+
+                <h6 class="fw-bold mb-1">
+
+                    {{ profissional.telefone|default:"Não informado" }}
+
+                </h6>
+
+                <small class="text-muted">
+
+                    Contato profissional
+
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- CADASTRO -->
+
+    <div class="col-sm-6 col-lg-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <div class="text-muted small mb-1">
+
+                    🗓️ Cadastro
+
+                </div>
+
+                <h5 class="fw-bold mb-1">
+
+                    {{ profissional.data_cadastro|date:"d/m/Y" }}
+
+                </h5>
+
+                <small class="text-muted">
+
+                    Data de registro
+
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- INFORMAÇÕES -->
+
+<div class="row g-4 mb-4">
+
+
+    <!-- DADOS PROFISSIONAIS -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-header bg-white border-0 p-4">
+
+                <h5 class="fw-bold mb-1">
+
+                    👨‍⚕️ Dados profissionais
+
+                </h5>
+
+                <small class="text-muted">
+
+                    Informações profissionais cadastradas
+
+                </small>
+
+            </div>
+
+
+            <div class="card-body pt-0">
+
+                <div class="row g-4">
+
+
+                    <div class="col-sm-6">
+
+                        <small class="text-muted d-block mb-1">
+
+                            Nome completo
+
+                        </small>
+
+                        <strong>
+
+                            {{ profissional.nome_completo }}
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="col-sm-6">
+
+                        <small class="text-muted d-block mb-1">
+
+                            CPF
+
+                        </small>
+
+                        <strong>
+
+                            {{ profissional.cpf|default:"Não informado" }}
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="col-sm-6">
+
+                        <small class="text-muted d-block mb-1">
+
+                            Especialidade
+
+                        </small>
+
+                        <strong>
+
+                            {{ profissional.get_especialidade_display }}
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="col-sm-6">
+
+                        <small class="text-muted d-block mb-1">
+
+                            Registro profissional
+
+                        </small>
+
+                        <strong>
+
+                            {{ profissional.registro_profissional|default:"Não informado" }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- CONTATO -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-header bg-white border-0 p-4">
+
+                <h5 class="fw-bold mb-1">
+
+                    📞 Informações de contato
+
+                </h5>
+
+                <small class="text-muted">
+
+                    Canais de contato do profissional
+
+                </small>
+
+            </div>
+
+
+            <div class="card-body pt-0">
+
+
+                <div class="mb-4">
+
+                    <small class="text-muted d-block mb-1">
+
+                        Telefone
+
+                    </small>
+
+                    <strong>
+
+                        {{ profissional.telefone|default:"Não informado" }}
+
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <small class="text-muted d-block mb-1">
+
+                        E-mail
+
+                    </small>
+
+                    {% if profissional.email %}
+
+                        <strong>
+
+                            {{ profissional.email }}
+
+                        </strong>
+
+                    {% else %}
+
+                        <span class="text-muted">
+
+                            Não informado
+
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="row mb-4">
+
+    <div class="col-lg-3 mb-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <small class="text-muted">
+
+                    Serviços
+
+                </small>
+
+                <h2 class="fw-bold text-primary mt-2">
+
+                    {{ estatisticas.total|default:0 }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-lg-3 mb-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <small class="text-muted">
+
+                    Ativos
+
+                </small>
+
+                <h2 class="fw-bold text-success mt-2">
+
+                    {{ estatisticas.ativos|default:0 }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-lg-3 mb-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <small class="text-muted">
+
+                    Ticket Médio
+
+                </small>
+
+                <h4 class="fw-bold mt-2 text-primary">
+
+                    R$ {{ estatisticas.ticket|floatformat:2|default:"0,00" }}
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-lg-3 mb-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <small class="text-muted">
+
+                    Tempo Médio
+
+                </small>
+
+                <h4 class="fw-bold mt-2 text-primary">
+
+                    {{ estatisticas.tempo|floatformat:0|default:"0" }} min
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- SERVIÇOS -->
+
+<div class="card border-0 shadow-sm mb-4">
+
+
+    <div class="card-header bg-white border-0 p-4">
+
+
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+
+
+            <div>
+
+                <h5 class="fw-bold mb-1">
+
+                    🩺 Serviços oferecidos
+
+                </h5>
+
+                <small class="text-muted">
+
+                    Serviços que este profissional está habilitado a realizar.
+
+                </small>
+
+            </div>
+
+
+            <a
+                href="{% url 'profissionais:adicionar_servico' profissional.pk %}"
+                class="btn btn-primary"
+            >
+
+                + Adicionar serviço
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card-body">
+
+
+        {% with servicos=profissional.servicos_configurados.all %}
+
+
+            {% if servicos %}
+
+
+                <div class="row g-4">
+
+
+                    {% for item in servicos %}
+
+
+                        <div class="col-md-6 col-xl-4">
+
+
+                            <div class="card border h-100 shadow-sm">
+
+
+                                <div class="card-body p-4">
+
+
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+
+
+                                        <div
+                                            class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center"
+                                            style="width: 46px; height: 46px;"
+                                        >
+
+                                            🩺
+
+                                        </div>
+
+
+                                        {% if item.ativo %}
+
+                                            <span class="badge bg-success-subtle text-success">
+
+                                                Ativo
+
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge bg-danger-subtle text-danger">
+
+                                                Inativo
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    <h5 class="fw-bold mb-2">
+
+                                        {{ item.servico.nome }}
+
+                                    </h5>
+
+
+                                    <div class="text-muted small mb-4">
+
+
+                                        <div class="mb-2">
+
+                                            ⏱️
+
+                                            {{ item.duracao_minutos }}
+
+                                            minutos
+
+                                        </div>
+
+
+                                        <div>
+
+                                            💰
+
+                                            <strong class="text-dark">
+
+                                                R$
+
+                                                {{ item.valor|floatformat:2 }}
+
+                                            </strong>
+
+                                        </div>
+
+
+                                    </div>
+
+
+                                    {% if item.servico.descricao %}
+
+                                        <p class="text-muted small mb-0">
+
+                                            {{ item.servico.descricao }}
+
+                                        </p>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <div class="text-center py-5">
+
+
+                    <div
+                        class="rounded-circle bg-primary bg-opacity-10 text-primary d-inline-flex align-items-center justify-content-center mb-3"
+                        style="width: 75px; height: 75px; font-size: 32px;"
+                    >
+
+                        🩺
+
+                    </div>
+
+
+                    <h5 class="fw-bold">
+
+                        Nenhum serviço configurado
+
+                    </h5>
+
+
+                    <p class="text-muted mb-4">
+
+                        Este profissional ainda não possui serviços associados.
+
+                    </p>
+
+
+                    <a
+                        href="{% url 'profissionais:adicionar_servico' profissional.pk %}"
+                        class="btn btn-primary"
+                    >
+
+                        + Adicionar primeiro serviço
+
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+
+        {% endwith %}
+
+    </div>
+
+</div>
+
+
+
+<!-- INATIVAÇÃO -->
+
+{% if profissional.ativo %}
+
+    <div class="card border-danger border-opacity-25 shadow-sm mb-4">
+
+
+        <div class="card-body p-4">
+
+
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+
+
+                <div>
+
+                    <h5 class="fw-bold text-danger mb-1">
+
+                        Inativar profissional
+
+                    </h5>
+
+
+                    <p class="text-muted mb-0">
+
+                        Ao inativar este profissional, ele deixará de aparecer
+                        na lista de profissionais ativos.
+
+                    </p>
+
+                </div>
+
+
+                <form
+                    method="post"
+                    action="{% url 'profissionais:excluir' profissional.pk %}"
+                >
+
+                    {% csrf_token %}
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-outline-danger"
+                        onclick="return confirm('Tem certeza que deseja inativar este profissional?')"
+                    >
+
+                        Inativar profissional
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endif %}
+
+
+
+<!-- RODAPÉ -->
+
+<div class="d-flex justify-content-between align-items-center text-muted small mb-3">
+
+    <span>
+
+        Cadastro realizado em
+        {{ profissional.data_cadastro|date:"d/m/Y H:i" }}
+
+    </span>
+
+
+    <span>
+
+        ID do profissional: #{{ profissional.pk }}
+
+    </span>
+
+</div>
+</div>
+
+<div class="card border-0 shadow-sm mt-4">
+
+    <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+
+        <div>
+
+            <h5 class="fw-bold mb-1">
+                Serviços oferecidos
+            </h5>
+
+            <small class="text-muted">
+                Serviços configurados para este profissional
+            </small>
+
+        </div>
+
+        <a
+            href="{% url 'profissionais:adicionar_servico' profissional.pk %}"
+            class="btn btn-primary"
+        >
+            + Adicionar serviço
+        </a>
+
+    </div>
+
+
+    <div class="card-body">
+
+        {% if servicos %}
+
+            <div class="row">
+
+                {% for item in servicos %}
+
+                <div class="col-xl-6 col-lg-6 mb-4">
+
+    <div
+        class="card border-0 shadow-sm h-100 servico-card"
+        style="
+            border-radius:18px;
+            transition:.25s;
+            overflow:hidden;
+        "
+    >
+
+        <div
+            style="
+                height:6px;
+                background:linear-gradient(90deg,#6f42c1,#9b5cff);
+            "
+        ></div>
+
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-start mb-4">
+
+                <div>
+
+                    <h5 class="fw-bold mb-1">
+
+                        {{ item.servico.nome }}
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        {{ item.servico.descricao }}
+
+                    </small>
+
+                </div>
+
+                {% if item.ativo %}
+
+                    <span class="badge bg-success-subtle text-success border border-success-subtle">
+
+                        ● Ativo
+
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
+
+                        ● Inativo
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="row text-center mb-4">
+
+                <div class="col">
+
+                    <div
+                        class="rounded-4 p-3"
+                        style="background:#f8f5ff;"
+                    >
+
+                        <div class="text-muted small">
+
+                            Valor
+
+                        </div>
+
+                        <div
+                            class="fw-bold fs-5"
+                            style="color:#6f42c1;"
+                        >
+
+                            R$ {{ item.valor }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col">
+
+                    <div
+                        class="rounded-4 p-3"
+                        style="background:#f8f5ff;"
+                    >
+
+                        <div class="text-muted small">
+
+                            Duração
+
+                        </div>
+
+                        <div
+                            class="fw-bold fs-5"
+                            style="color:#6f42c1;"
+                        >
+
+                            {{ item.duracao_minutos }} min
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="d-flex gap-2">
+
+                <a
+                    href="{% url 'profissionais:editar_servico' item.pk %}"
+                    class="btn btn-outline-primary flex-fill"
+                >
+
+                    ✏️ Editar
+
+                </a>
+
+                {% if item.ativo %}
+
+                <a
+                    href="{% url 'profissionais:desativar_servico' item.pk %}"
+                    class="btn btn-outline-danger flex-fill"
+                >
+
+                    ❌ Desativar
+
+                </a>
+
+                {% else %}
+
+                <a
+                    href="{% url 'profissionais:reativar_servico' item.pk %}"
+                    class="btn btn-success flex-fill"
+                >
+
+                    ✅ Reativar
+
+                </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="text-center py-5">
+
+                <div
+                    class="rounded-circle bg-primary bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-3"
+                    style="width:80px;height:80px;font-size:34px;"
+                >
+
+                    🩺
+
+                </div>
+
+                <h5>
+
+                    Nenhum serviço configurado
+
+                </h5>
+
+                <p class="text-muted">
+
+                    Este profissional ainda não possui serviços cadastrados.
+
+                </p>
+
+                <a
+                    href="{% url 'profissionais:adicionar_servico' profissional.pk %}"
+                    class="btn btn-primary"
+                >
+
+                    Adicionar primeiro serviço
+
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+<style>
+
+.servico-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 18px 40px rgba(111,66,193,.18)!important;
+
+}
+
+</style>
+
+{% endblock %}

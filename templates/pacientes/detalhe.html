@@ -1,0 +1,334 @@
+{% extends "base.html" %}
+
+{% block title %}
+Detalhes do Paciente
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2>{{ paciente.nome_completo }}</h2>
+
+            <p class="text-muted mb-0">
+                CPF: {{ paciente.cpf }}
+            </p>
+
+        </div>
+
+        <a href="{% url 'pacientes:editar' paciente.pk %}"
+           class="btn btn-primary">
+
+            Editar Paciente
+
+        </a>
+
+    </div>
+
+
+    <div class="row mb-4">
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Atendimentos
+                    </h6>
+
+                    <h2>
+                        {{ total_atendimentos }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Total Pago
+                    </h6>
+
+                    <h2>
+                        R$ {{ total_pago }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Próximo Atendimento
+                    </h6>
+
+                    {% if proximo_agendamento %}
+
+                        <strong>
+
+                            {{ proximo_agendamento.data|date:"d/m/Y" }}
+
+                        </strong>
+
+                        <br>
+
+                        {{ proximo_agendamento.horario }}
+
+                    {% else %}
+
+                        Nenhum
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Último Pagamento
+                    </h6>
+
+                    {% if ultimo_pagamento %}
+
+                        <strong>
+
+                            R$ {{ ultimo_pagamento.valor }}
+
+                        </strong>
+
+                        <br>
+
+                        {{ ultimo_pagamento.data|date:"d/m/Y" }}
+
+                    {% else %}
+
+                        Nenhum
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+
+            <strong>Histórico de Agendamentos</strong>
+
+        </div>
+
+        <div class="card-body p-0">
+
+            <table class="table table-hover mb-0">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Data</th>
+
+                        <th>Horário</th>
+
+                        <th>Profissional</th>
+
+                        <th>Serviço</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for agendamento in agendamentos %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ agendamento.data|date:"d/m/Y" }}
+
+                        </td>
+
+                        <td>
+
+                            {{ agendamento.horario }}
+
+                        </td>
+
+                        <td>
+
+                            {{ agendamento.profissional.nome_completo }}
+
+                        </td>
+
+                        <td>
+
+                            {{ agendamento.servico.nome }}
+
+                        </td>
+
+                        <td>
+
+                            {{ agendamento.get_status_display }}
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="5" class="text-center">
+
+                            Nenhum atendimento encontrado.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <strong>Histórico Financeiro</strong>
+
+        </div>
+
+        <div class="card-body p-0">
+
+            <table class="table table-hover mb-0">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Data</th>
+
+                        <th>Categoria</th>
+
+                        <th>Valor</th>
+
+                        <th>Forma</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for movimento in financeiro %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ movimento.data|date:"d/m/Y" }}
+
+                        </td>
+
+                        <td>
+
+                            {{ movimento.categoria }}
+
+                        </td>
+
+                        <td>
+
+                            R$ {{ movimento.valor }}
+
+                        </td>
+
+                        <td>
+
+                            {{ movimento.get_forma_pagamento_display }}
+
+                        </td>
+
+                        <td>
+
+                            {{ movimento.get_status_display }}
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="5" class="text-center">
+
+                            Nenhuma movimentação financeira.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

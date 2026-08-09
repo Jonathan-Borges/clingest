@@ -1,0 +1,809 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+
+    {% if editar %}
+        Editar Agendamento
+    {% else %}
+        Novo Agendamento
+    {% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container-fluid">
+
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+
+        <div>
+
+           <h1>
+
+    {% if editar %}
+        ✏️ Editar Agendamento
+    {% else %}
+        📅 Novo Agendamento
+    {% endif %}
+
+</h1>
+
+            <p class="text-muted">
+
+                Cadastre um novo agendamento para a clínica.
+
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'agendamentos:lista' %}"
+            class="btn btn-secondary"
+        >
+
+            Voltar
+
+        </a>
+
+
+    </div>
+
+
+    <div class="card shadow-sm">
+
+
+        <div class="card-body">
+
+
+            <form method="post">
+
+
+                {% csrf_token %}
+
+
+                {% if form.non_field_errors %}
+
+                    <div class="alert alert-danger">
+
+                        {{ form.non_field_errors }}
+
+                    </div>
+
+                {% endif %}
+
+
+                <div class="row g-3">
+
+
+                    <!-- PACIENTE -->
+
+
+                    <div class="col-md-6">
+
+
+                        <label class="form-label">
+
+                            Paciente
+
+                        </label>
+
+
+                        {{ form.paciente }}
+
+
+                        {% for error in form.paciente.errors %}
+
+                            <div class="text-danger small">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                    <!-- PROFISSIONAL -->
+
+
+                    <div class="col-md-6">
+
+
+                        <label class="form-label">
+
+                            Profissional
+
+                        </label>
+
+
+                        {{ form.profissional }}
+
+
+                        {% for error in form.profissional.errors %}
+
+                            <div class="text-danger small">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                    <!-- SERVIÇO -->
+
+
+                    <div class="col-md-6">
+
+
+                        <label class="form-label">
+
+                            Serviço
+
+                        </label>
+
+
+                        {{ form.servico }}
+
+
+                        {% for error in form.servico.errors %}
+
+                            <div class="text-danger small">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                    <!-- VALOR -->
+
+
+                    <div class="col-md-3">
+
+
+                        <label class="form-label">
+
+                            Valor do serviço
+
+                        </label>
+
+
+                        {{ form.valor }}
+
+
+                        <div
+                            id="valor-ajuda"
+                            class="form-text"
+                        >
+
+                            Selecione um serviço para carregar o valor.
+
+                        </div>
+
+
+                        {% for error in form.valor.errors %}
+
+                            <div class="text-danger small">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                    <!-- DURAÇÃO -->
+
+
+                    <div class="col-md-3">
+
+
+                        <label class="form-label">
+
+                            Duração
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="id_duracao"
+                            class="form-control"
+                            value=""
+                            readonly
+                            placeholder="Ex.: 60 minutos"
+                        >
+
+
+                        <div
+                            id="duracao-ajuda"
+                            class="form-text"
+                        >
+
+                            A duração será preenchida automaticamente.
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- DATA -->
+
+
+                    <div class="col-md-6">
+
+
+                        <label class="form-label">
+
+                            Data
+
+                        </label>
+
+
+                        {{ form.data }}
+
+
+                        {% for error in form.data.errors %}
+
+                            <div class="text-danger small">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                    <!-- HORÁRIO -->
+
+
+                    <div class="col-md-6">
+
+
+                        <label class="form-label">
+
+                            Horário
+
+                        </label>
+
+
+                        {{ form.horario }}
+
+
+                        {% for error in form.horario.errors %}
+
+                            <div class="text-danger small">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+
+                    <div class="col-md-6">
+
+
+                        <label class="form-label">
+
+                            Status
+
+                        </label>
+
+
+                        {{ form.status }}
+
+
+                        {% for error in form.status.errors %}
+
+                            <div class="text-danger small">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                    <!-- OBSERVAÇÕES -->
+
+
+                    <div class="col-md-12">
+
+
+                        <label class="form-label">
+
+                            Observações
+
+                        </label>
+
+
+                        {{ form.observacoes }}
+
+
+                        {% for error in form.observacoes.errors %}
+
+                            <div class="text-danger small">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                </div>
+
+
+        <div class="mt-4">
+
+
+    {% if editar %}
+
+        <button
+            type="submit"
+            class="btn btn-warning"
+        >
+
+            ✏️ Atualizar agendamento
+
+        </button>
+
+
+    {% else %}
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+        >
+
+            💾 Salvar agendamento
+
+        </button>
+
+
+    {% endif %}
+
+
+
+    <a
+        href="{% url 'agendamentos:lista' %}"
+        class="btn btn-secondary"
+    >
+
+        Cancelar
+
+    </a>
+
+
+</div>
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        console.log(
+            "JavaScript do agendamento carregado."
+        );
+
+
+        const profissionalSelect =
+            document.getElementById(
+                "id_profissional"
+            );
+
+
+        const servicoSelect =
+            document.getElementById(
+                "id_servico"
+            );
+
+
+        const valorInput =
+            document.getElementById(
+                "id_valor"
+            );
+
+
+        const duracaoInput =
+            document.getElementById(
+                "id_duracao"
+            );
+
+
+        const valorAjuda =
+            document.getElementById(
+                "valor-ajuda"
+            );
+
+
+        const duracaoAjuda =
+            document.getElementById(
+                "duracao-ajuda"
+            );
+
+
+        if (!profissionalSelect) {
+
+            console.error(
+                "Campo profissional não encontrado."
+            );
+
+            return;
+
+        }
+
+
+        if (!servicoSelect) {
+
+            console.error(
+                "Campo serviço não encontrado."
+            );
+
+            return;
+
+        }
+
+
+        if (!valorInput) {
+
+            console.error(
+                "Campo valor não encontrado."
+            );
+
+            return;
+
+        }
+
+
+        console.log(
+            "Todos os campos encontrados."
+        );
+
+
+        profissionalSelect.addEventListener(
+            "change",
+            function () {
+
+
+                const profissionalId =
+                    this.value;
+
+
+                console.log(
+                    "Profissional selecionado:",
+                    profissionalId
+                );
+
+
+                servicoSelect.innerHTML =
+                    '<option value="">'
+                    + 'Carregando serviços...'
+                    + '</option>';
+
+
+                valorInput.value = "";
+
+
+                duracaoInput.value = "";
+
+
+                valorAjuda.textContent =
+                    "Carregando valor...";
+
+
+                duracaoAjuda.textContent =
+                    "Carregando duração...";
+
+
+                if (!profissionalId) {
+
+
+                    servicoSelect.innerHTML =
+                        '<option value="">'
+                        + 'Selecione um serviço'
+                        + '</option>';
+
+
+                    valorAjuda.textContent =
+                        "Selecione um serviço para carregar o valor.";
+
+
+                    duracaoAjuda.textContent =
+                        "A duração será preenchida automaticamente.";
+
+
+                    return;
+
+                }
+
+
+                fetch(
+    `/agendamentos/servicos-profissional/${profissionalId}/`
+)
+
+
+                .then(
+                    response => {
+
+
+                        if (!response.ok) {
+
+                            throw new Error(
+                                "Erro HTTP: "
+                                + response.status
+                            );
+
+                        }
+
+
+                        return response.json();
+
+                    }
+                )
+
+
+                .then(
+                    data => {
+
+
+                        console.log(
+                            "Serviços recebidos:",
+                            data
+                        );
+
+
+                        servicoSelect.innerHTML =
+                            '<option value="">'
+                            + 'Selecione um serviço'
+                            + '</option>';
+
+
+                        if (
+                            data.servicos.length === 0
+                        ) {
+
+
+                            servicoSelect.innerHTML =
+                                '<option value="">'
+                                + 'Nenhum serviço disponível'
+                                + '</option>';
+
+
+                            valorAjuda.textContent =
+                                "Este profissional não possui serviços ativos.";
+
+
+                            duracaoAjuda.textContent =
+                                "Nenhuma duração disponível.";
+
+
+                            return;
+
+                        }
+
+
+                        data.servicos.forEach(
+                            function (servico) {
+
+
+                                const option =
+                                    document.createElement(
+                                        "option"
+                                    );
+
+
+                                option.value =
+                                    servico.id;
+
+
+                                option.textContent =
+                                    servico.nome;
+
+
+                                option.dataset.valor =
+                                    servico.valor;
+
+
+                                option.dataset.duracao =
+                                    servico.duracao_minutos;
+
+
+                                servicoSelect.appendChild(
+                                    option
+                                );
+
+
+                            }
+                        );
+
+
+                        valorAjuda.textContent =
+                            "Selecione o serviço para preencher o valor.";
+
+
+                        duracaoAjuda.textContent =
+                            "Selecione o serviço para preencher a duração.";
+
+                    }
+                )
+
+
+                .catch(
+                    function (error) {
+
+
+                        console.error(
+                            "Erro ao carregar serviços:",
+                            error
+                        );
+
+
+                        servicoSelect.innerHTML =
+                            '<option value="">'
+                            + 'Erro ao carregar serviços'
+                            + '</option>';
+
+
+                        valorAjuda.textContent =
+                            "Não foi possível carregar o valor.";
+
+
+                        duracaoAjuda.textContent =
+                            "Não foi possível carregar a duração.";
+
+                    }
+                );
+
+            }
+        );
+
+
+        servicoSelect.addEventListener(
+            "change",
+            function () {
+
+
+                const optionSelecionada =
+                    this.options[
+                        this.selectedIndex
+                    ];
+
+
+                if (
+                    !optionSelecionada ||
+                    !optionSelecionada.dataset.valor
+                ) {
+
+
+                    valorInput.value =
+                        "";
+
+
+                    duracaoInput.value =
+                        "";
+
+
+                    valorAjuda.textContent =
+                        "Selecione um serviço para carregar o valor.";
+
+
+                    duracaoAjuda.textContent =
+                        "A duração será preenchida automaticamente.";
+
+
+                    return;
+
+                }
+
+
+                const valor =
+                    optionSelecionada.dataset.valor;
+
+
+                const duracao =
+                    optionSelecionada.dataset.duracao;
+
+
+                console.log(
+                    "Serviço selecionado:",
+                    optionSelecionada.textContent
+                );
+
+
+                console.log(
+                    "Valor:",
+                    valor
+                );
+
+
+                console.log(
+                    "Duração:",
+                    duracao
+                );
+
+
+                valorInput.value =
+                    valor;
+
+
+                duracaoInput.value =
+                    duracao
+                    + " minutos";
+
+
+                valorAjuda.textContent =
+                    "Valor definido pelo serviço do profissional.";
+
+
+                duracaoAjuda.textContent =
+                    "Duração definida pelo serviço do profissional.";
+
+            }
+        );
+
+
+    }
+);
+
+</script>
+
+
+{% endblock %}

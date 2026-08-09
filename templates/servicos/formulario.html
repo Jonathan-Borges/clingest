@@ -1,0 +1,598 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+
+{% if servico %}
+    Editar serviço
+{% else %}
+    Novo serviço
+{% endif %}
+
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-2">
+
+
+<!-- CABEÇALHO -->
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+
+    <div class="d-flex align-items-center gap-3">
+
+
+        <div
+            class="rounded-3 d-flex align-items-center justify-content-center"
+            style="
+                width: 58px;
+                height: 58px;
+                background: rgba(111, 66, 193, 0.10);
+                color: #6f42c1;
+                font-size: 26px;
+            "
+        >
+
+            🩺
+
+        </div>
+
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+
+
+                {% if servico %}
+
+                    Editar serviço
+
+                {% else %}
+
+                    Novo serviço
+
+                {% endif %}
+
+
+            </h2>
+
+
+            <p class="text-muted mb-0">
+
+
+                {% if servico %}
+
+                    Atualize as informações do serviço cadastrado.
+
+                {% else %}
+
+                    Cadastre um novo serviço oferecido pela clínica.
+
+                {% endif %}
+
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <a
+        href="{% if servico %}{% url 'servicos:detalhe' servico.pk %}{% else %}{% url 'servicos:lista' %}{% endif %}"
+        class="btn btn-outline-secondary px-4"
+    >
+
+        ← Voltar
+
+    </a>
+
+</div>
+
+
+
+<!-- FORMULÁRIO -->
+
+<form method="post">
+
+    {% csrf_token %}
+
+
+    <!-- ERROS GERAIS -->
+
+    {% if form.non_field_errors %}
+
+        <div class="alert alert-danger border-0 shadow-sm">
+
+            <strong>
+
+                Não foi possível salvar o serviço.
+
+            </strong>
+
+
+            <div class="mt-2">
+
+                {{ form.non_field_errors }}
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+
+    <div class="row g-4">
+
+
+        <!-- INFORMAÇÕES DO SERVIÇO -->
+
+        <div class="col-lg-7">
+
+
+            <div class="card border-0 shadow-sm h-100">
+
+
+                <div class="card-header bg-white border-0 p-4">
+
+
+                    <div class="d-flex align-items-center gap-3">
+
+
+                        <div
+                            class="rounded-3 d-flex align-items-center justify-content-center"
+                            style="
+                                width: 42px;
+                                height: 42px;
+                                background: rgba(111, 66, 193, 0.10);
+                                color: #6f42c1;
+                            "
+                        >
+
+                            📋
+
+                        </div>
+
+
+                        <div>
+
+                            <h5 class="fw-bold mb-1">
+
+                                Informações do serviço
+
+                            </h5>
+
+
+                            <small class="text-muted">
+
+                                Defina os dados principais do procedimento.
+
+                            </small>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="card-body p-4">
+
+
+                    <!-- NOME -->
+
+                    <div class="mb-4">
+
+
+                        <label
+                            for="{{ form.nome.id_for_label }}"
+                            class="form-label fw-semibold"
+                        >
+
+                            Nome do serviço
+
+                        </label>
+
+
+                        {{ form.nome }}
+
+
+                        {% if form.nome.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                {{ form.nome.errors }}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <small class="text-muted">
+
+                            Ex.: Consulta Nutricional, Avaliação Fisioterapêutica ou Limpeza Dental.
+
+                        </small>
+
+
+                    </div>
+
+
+
+                    <!-- DESCRIÇÃO -->
+
+                    <div class="mb-3">
+
+
+                        <label
+                            for="{{ form.descricao.id_for_label }}"
+                            class="form-label fw-semibold"
+                        >
+
+                            Descrição
+
+                        </label>
+
+
+                        {{ form.descricao }}
+
+
+                        {% if form.descricao.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                {{ form.descricao.errors }}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <small class="text-muted">
+
+                            Informe detalhes importantes sobre o serviço.
+
+                        </small>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- CONFIGURAÇÃO -->
+
+        <div class="col-lg-5">
+
+
+            <div class="card border-0 shadow-sm h-100">
+
+
+                <div class="card-header bg-white border-0 p-4">
+
+
+                    <div class="d-flex align-items-center gap-3">
+
+
+                        <div
+                            class="rounded-3 d-flex align-items-center justify-content-center"
+                            style="
+                                width: 42px;
+                                height: 42px;
+                                background: rgba(111, 66, 193, 0.10);
+                                color: #6f42c1;
+                            "
+                        >
+
+                            ⚙️
+
+                        </div>
+
+
+                        <div>
+
+                            <h5 class="fw-bold mb-1">
+
+                                Configuração
+
+                            </h5>
+
+
+                            <small class="text-muted">
+
+                                Defina duração e valor do serviço.
+
+                            </small>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="card-body p-4">
+
+
+                    <!-- DURAÇÃO -->
+
+                    <div class="mb-4">
+
+
+                        <label
+                            for="{{ form.duracao_minutos.id_for_label }}"
+                            class="form-label fw-semibold"
+                        >
+
+                            Duração
+
+                        </label>
+
+
+                        <div class="input-group">
+
+
+                            {{ form.duracao_minutos }}
+
+
+                            <span class="input-group-text">
+
+                                minutos
+
+                            </span>
+
+
+                        </div>
+
+
+                        {% if form.duracao_minutos.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                {{ form.duracao_minutos.errors }}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <small class="text-muted">
+
+                            Tempo estimado para realizar o serviço.
+
+                        </small>
+
+
+                    </div>
+
+
+
+                    <!-- VALOR -->
+
+                    <div class="mb-3">
+
+
+                        <label
+                            for="{{ form.valor.id_for_label }}"
+                            class="form-label fw-semibold"
+                        >
+
+                            Valor
+
+                        </label>
+
+
+                        <div class="input-group">
+
+
+                            <span class="input-group-text">
+
+                                R$
+
+                            </span>
+
+
+                            {{ form.valor }}
+
+
+                        </div>
+
+
+                        {% if form.valor.errors %}
+
+                            <div class="text-danger small mt-1">
+
+                                {{ form.valor.errors }}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <small class="text-muted">
+
+                            Valor padrão do serviço.
+
+                        </small>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- RESUMO -->
+
+    <div class="card border-0 shadow-sm mt-4">
+
+
+        <div class="card-body p-4">
+
+
+            <div class="d-flex align-items-center gap-3">
+
+
+                <div
+                    class="rounded-3 d-flex align-items-center justify-content-center"
+                    style="
+                        width: 42px;
+                        height: 42px;
+                        background: rgba(25, 135, 84, 0.10);
+                        color: #198754;
+                    "
+                >
+
+                    ✓
+
+                </div>
+
+
+                <div>
+
+
+                    <strong class="d-block">
+
+                        Serviço disponível para a clínica
+
+                    </strong>
+
+
+                    <small class="text-muted">
+
+                        Após o cadastro, o serviço poderá ser associado aos profissionais.
+
+                    </small>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- AÇÕES -->
+
+    <div class="card border-0 shadow-sm mt-4">
+
+
+        <div class="card-body p-4">
+
+
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+
+
+                <div>
+
+
+                    <strong class="d-block">
+
+
+                        {% if servico %}
+
+                            Atualizar serviço
+
+                        {% else %}
+
+                            Cadastrar serviço
+
+                        {% endif %}
+
+
+                    </strong>
+
+
+                    <small class="text-muted">
+
+                        Confira as informações antes de salvar.
+
+                    </small>
+
+
+                </div>
+
+
+                <div class="d-flex gap-2">
+
+
+                    <a
+                        href="{% if servico %}{% url 'servicos:detalhe' servico.pk %}{% else %}{% url 'servicos:lista' %}{% endif %}"
+                        class="btn btn-light border px-4"
+                    >
+
+                        Cancelar
+
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary px-5"
+                    >
+
+
+                        {% if servico %}
+
+                            💾 Salvar alterações
+
+                        {% else %}
+
+                            + Cadastrar serviço
+
+                        {% endif %}
+
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</form>
+
+
+</div>
+
+{% endblock %}

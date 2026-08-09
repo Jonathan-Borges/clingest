@@ -1,0 +1,675 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+Profissionais
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+<!-- CABEÇALHO -->
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+
+    <div class="d-flex align-items-center gap-3">
+
+
+        <div
+            class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center"
+            style="width: 58px; height: 58px; font-size: 25px;"
+        >
+
+            👨‍⚕️
+
+        </div>
+
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+
+                Profissionais
+
+            </h2>
+
+
+            <p class="text-muted mb-0">
+
+                Gerencie os profissionais e suas especialidades.
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <a
+        href="{% url 'profissionais:criar' %}"
+        class="btn btn-primary px-4 shadow-sm"
+    >
+
+        + Novo profissional
+
+    </a>
+
+</div>
+
+
+
+<!-- FILTROS -->
+
+<div class="card border-0 shadow-sm mb-4">
+
+
+    <div class="card-body p-4">
+
+
+        <form
+            method="get"
+            class="row g-3"
+        >
+
+
+            <!-- BUSCA -->
+
+            <div class="col-12 col-lg-5">
+
+
+                <label class="form-label fw-semibold">
+
+                    Buscar profissional
+
+                </label>
+
+
+                <div class="input-group">
+
+
+                    <span class="input-group-text bg-white">
+
+                        🔍
+
+                    </span>
+
+
+                    <input
+                        type="text"
+                        name="busca"
+                        class="form-control"
+                        placeholder="Nome, CPF, telefone ou e-mail..."
+                        value="{{ busca }}"
+                    >
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ESPECIALIDADE -->
+
+            <div class="col-12 col-md-6 col-lg-3">
+
+
+                <label class="form-label fw-semibold">
+
+                    Especialidade
+
+                </label>
+
+
+                <select
+                    name="especialidade"
+                    class="form-select"
+                >
+
+
+                    <option value="">
+
+                        Todas
+
+                    </option>
+
+
+                    {% for valor, nome in especialidades %}
+
+
+                        <option
+                            value="{{ valor }}"
+                            {% if especialidade == valor %}selected{% endif %}
+                        >
+
+                            {{ nome }}
+
+                        </option>
+
+
+                    {% endfor %}
+
+
+                </select>
+
+            </div>
+
+
+
+            <!-- STATUS -->
+
+            <div class="col-12 col-md-6 col-lg-2">
+
+
+                <label class="form-label fw-semibold">
+
+                    Status
+
+                </label>
+
+
+                <select
+                    name="status"
+                    class="form-select"
+                >
+
+
+                    <option
+                        value="ativo"
+                        {% if status == "ativo" %}selected{% endif %}
+                    >
+
+                        Ativos
+
+                    </option>
+
+
+                    <option
+                        value="inativo"
+                        {% if status == "inativo" %}selected{% endif %}
+                    >
+
+                        Inativos
+
+                    </option>
+
+
+                    <option
+                        value="todos"
+                        {% if status == "todos" %}selected{% endif %}
+                    >
+
+                        Todos
+
+                    </option>
+
+
+                </select>
+
+            </div>
+
+
+
+            <!-- BOTÕES -->
+
+            <div class="col-12 col-lg-2 d-flex align-items-end gap-2">
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary w-100"
+                >
+
+                    Filtrar
+
+                </button>
+
+
+                <a
+                    href="{% url 'profissionais:lista' %}"
+                    class="btn btn-outline-secondary"
+                    title="Limpar filtros"
+                >
+
+                    ↻
+
+                </a>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- CABEÇALHO DA LISTA -->
+
+<div class="card border-0 shadow-sm">
+
+
+    <div class="card-header bg-white border-0 p-4">
+
+
+        <div class="d-flex justify-content-between align-items-center">
+
+
+            <div>
+
+                <h5 class="fw-bold mb-1">
+
+                    Equipe profissional
+
+                </h5>
+
+
+                <small class="text-muted">
+
+                    Profissionais cadastrados no sistema.
+
+                </small>
+
+            </div>
+
+
+            <span class="badge bg-primary rounded-pill px-3 py-2">
+
+                {{ profissionais|length }}
+
+                profissional{{ profissionais|length|pluralize }}
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card-body p-0">
+
+
+        {% if profissionais %}
+
+
+            <div class="table-responsive">
+
+
+                <table class="table table-hover align-middle mb-0">
+
+
+                    <thead class="table-light">
+
+
+                        <tr>
+
+
+                            <th class="px-4">
+
+                                Profissional
+
+                            </th>
+
+
+                            <th>
+
+                                Especialidade
+
+                            </th>
+
+
+                            <th>
+
+                                Registro
+
+                            </th>
+
+
+                            <th>
+
+                                Contato
+
+                            </th>
+
+
+                            <th>
+
+                                Serviços
+
+                            </th>
+
+
+                            <th>
+
+                                Status
+
+                            </th>
+
+
+                            <th class="text-end px-4">
+
+                                Ações
+
+                            </th>
+
+
+                        </tr>
+
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        {% for profissional in profissionais %}
+
+
+                            <tr>
+
+
+                                <!-- PROFISSIONAL -->
+
+                                <td class="px-4">
+
+
+                                    <div class="d-flex align-items-center gap-3">
+
+
+                                        <div
+                                            class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center fw-bold"
+                                            style="width: 44px; height: 44px;"
+                                        >
+
+                                            {{ profissional.nome_completo|first|upper }}
+
+                                        </div>
+
+
+                                        <div>
+
+
+                                            <div class="fw-semibold">
+
+                                                {{ profissional.nome_completo }}
+
+                                            </div>
+
+
+                                            <small class="text-muted">
+
+                                                ID #{{ profissional.pk }}
+
+                                            </small>
+
+                                        </div>
+
+
+                                    </div>
+
+
+                                </td>
+
+
+
+                                <!-- ESPECIALIDADE -->
+
+                                <td>
+
+
+                                    <span class="badge bg-primary-subtle text-primary">
+
+                                        {{ profissional.get_especialidade_display }}
+
+                                    </span>
+
+
+                                </td>
+
+
+
+                                <!-- REGISTRO -->
+
+                                <td>
+
+
+                                    {% if profissional.registro_profissional %}
+
+                                        <span class="text-muted">
+
+                                            {{ profissional.registro_profissional }}
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+
+                                            Não informado
+
+                                        </span>
+
+                                    {% endif %}
+
+
+                                </td>
+
+
+
+                                <!-- CONTATO -->
+
+                                <td>
+
+
+                                    {% if profissional.telefone %}
+
+                                        <div>
+
+                                            📞
+
+                                            {{ profissional.telefone }}
+
+                                        </div>
+
+                                    {% endif %}
+
+
+                                    {% if profissional.email %}
+
+                                        <small class="text-muted">
+
+                                            {{ profissional.email }}
+
+                                        </small>
+
+                                    {% endif %}
+
+
+                                    {% if not profissional.telefone and not profissional.email %}
+
+                                        <span class="text-muted">
+
+                                            Não informado
+
+                                        </span>
+
+                                    {% endif %}
+
+
+                                </td>
+
+
+
+                                <!-- SERVIÇOS -->
+
+                                <td>
+
+
+                                    <span class="badge bg-light text-dark border">
+
+                                        🩺
+
+                                        {{ profissional.servicos_configurados.all|length }}
+
+                                    </span>
+
+
+                                </td>
+
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+
+                                    {% if profissional.ativo %}
+
+
+                                        <span class="badge bg-success-subtle text-success">
+
+                                            ● Ativo
+
+                                        </span>
+
+
+                                    {% else %}
+
+
+                                        <span class="badge bg-danger-subtle text-danger">
+
+                                            ● Inativo
+
+                                        </span>
+
+
+                                    {% endif %}
+
+
+                                </td>
+
+
+
+                                <!-- AÇÕES -->
+
+                                <td class="text-end px-4">
+
+
+                                    <div class="btn-group">
+
+
+                                        <a
+                                            href="{% url 'profissionais:detalhe' profissional.pk %}"
+                                            class="btn btn-sm btn-outline-primary"
+                                            title="Visualizar profissional"
+                                        >
+
+                                            👁️
+
+                                        </a>
+
+
+                                        <a
+                                            href="{% url 'profissionais:editar' profissional.pk %}"
+                                            class="btn btn-sm btn-outline-warning"
+                                            title="Editar profissional"
+                                        >
+
+                                            ✏️
+
+                                        </a>
+
+
+                                    </div>
+
+
+                                </td>
+
+
+                            </tr>
+
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        {% else %}
+
+
+            <!-- ESTADO VAZIO -->
+
+            <div class="text-center py-5 px-3">
+
+
+                <div
+                    class="rounded-circle bg-primary bg-opacity-10 text-primary d-inline-flex align-items-center justify-content-center mb-3"
+                    style="width: 80px; height: 80px; font-size: 36px;"
+                >
+
+                    👨‍⚕️
+
+                </div>
+
+
+                <h4 class="fw-bold">
+
+                    Nenhum profissional encontrado
+
+                </h4>
+
+
+                <p class="text-muted mb-4">
+
+                    Não encontramos profissionais com os filtros selecionados.
+
+                </p>
+
+
+                <a
+                    href="{% url 'profissionais:lista' %}"
+                    class="btn btn-outline-secondary me-2"
+                >
+
+                    Limpar filtros
+
+                </a>
+
+
+                <a
+                    href="{% url 'profissionais:criar' %}"
+                    class="btn btn-primary"
+                >
+
+                    + Novo profissional
+
+                </a>
+
+
+            </div>
+
+        {% endif %}
+
+
+    </div>
+
+</div>
+
+
+</div>
+
+{% endblock %}

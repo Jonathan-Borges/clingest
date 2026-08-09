@@ -1,0 +1,899 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    rel="stylesheet"
+>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+    {% block title %}
+        ClinGest
+    {% endblock %}
+</title>
+
+
+<!-- Bootstrap -->
+
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+>
+
+
+<!-- Bootstrap Icons -->
+
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+>
+
+
+<!-- CSS PREMIUM -->
+
+<style>
+
+    :root {
+
+        --roxo-principal: #6f42c1;
+
+        --roxo-escuro: #4b2a82;
+
+        --roxo-claro: #8b5cf6;
+
+        --fundo: #f6f5fa;
+
+        --texto: #2d2a3a;
+
+        --sidebar-width: 260px;
+
+    }
+
+
+    * {
+
+        box-sizing: border-box;
+
+    }
+
+
+    body {
+
+        margin: 0;
+
+        background-color: var(--fundo);
+
+        color: var(--texto);
+
+        font-family:
+            "Inter",
+            "Segoe UI",
+            Arial,
+            sans-serif;
+
+    }
+
+
+    /* =====================================
+       NAVBAR
+    ===================================== */
+
+    .topbar {
+
+        height: 70px;
+
+        background: #ffffff;
+
+        border-bottom:
+            1px solid
+            rgba(0, 0, 0, 0.06);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        padding:
+            0 30px;
+
+        position: fixed;
+
+        top: 0;
+
+        left: var(--sidebar-width);
+
+        right: 0;
+
+        z-index: 1000;
+
+    }
+
+
+    .topbar-title {
+
+        font-size: 18px;
+
+        font-weight: 600;
+
+        color: var(--texto);
+
+    }
+
+
+    .user-area {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+    }
+
+
+    .user-avatar {
+
+        width: 40px;
+
+        height: 40px;
+
+        border-radius: 50%;
+
+        background:
+            linear-gradient(
+                135deg,
+                var(--roxo-principal),
+                var(--roxo-claro)
+            );
+
+        color: white;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-weight: 600;
+
+    }
+
+
+    .user-name {
+
+        font-size: 14px;
+
+        font-weight: 600;
+
+    }
+
+
+    .logout-btn {
+
+        border: none;
+
+        background: transparent;
+
+        color: #dc3545;
+
+        font-size: 18px;
+
+        transition: 0.2s;
+
+    }
+
+
+    .logout-btn:hover {
+
+        color: #a71d2a;
+
+        transform: scale(1.1);
+
+    }
+
+
+    /* =====================================
+       SIDEBAR
+    ===================================== */
+
+    .sidebar {
+
+        position: fixed;
+
+        top: 0;
+
+        left: 0;
+
+        bottom: 0;
+
+        width: var(--sidebar-width);
+
+        background:
+            linear-gradient(
+                180deg,
+                #24143d 0%,
+                #321958 50%,
+                #24143d 100%
+            );
+
+        color: white;
+
+        z-index: 1100;
+
+        padding:
+            25px 15px;
+
+        box-shadow:
+            5px 0 20px
+            rgba(40, 20, 70, 0.12);
+
+    }
+
+
+    /* LOGO */
+
+    .brand {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+        padding:
+            0 10px 25px;
+
+        margin-bottom: 15px;
+
+        border-bottom:
+            1px solid
+            rgba(255,255,255,0.1);
+
+    }
+
+
+    .brand-icon {
+
+        width: 42px;
+
+        height: 42px;
+
+        border-radius: 12px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #8b5cf6,
+                #6f42c1
+            );
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 21px;
+
+        box-shadow:
+            0 5px 15px
+            rgba(139, 92, 246, 0.35);
+
+    }
+
+
+    .brand-text {
+
+        font-size: 17px;
+
+        font-weight: 700;
+
+        letter-spacing: 0.2px;
+
+    }
+
+
+    .brand-subtitle {
+
+        display: block;
+
+        font-size: 11px;
+
+        font-weight: 400;
+
+        opacity: 0.6;
+
+        margin-top: 2px;
+
+    }
+
+
+    /* MENU */
+
+    .sidebar-menu {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 5px;
+
+    }
+
+
+    .sidebar-link {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 13px;
+
+        padding:
+            12px 14px;
+
+        border-radius: 10px;
+
+        color:
+            rgba(255,255,255,0.72);
+
+        text-decoration: none;
+
+        font-size: 14px;
+
+        font-weight: 500;
+
+        transition:
+            all 0.2s ease;
+
+    }
+
+
+    .sidebar-link i {
+
+        font-size: 18px;
+
+        width: 22px;
+
+        text-align: center;
+
+    }
+
+
+    .sidebar-link:hover {
+
+        background:
+            rgba(255,255,255,0.08);
+
+        color: white;
+
+        transform:
+            translateX(3px);
+
+    }
+
+
+    .sidebar-link.active {
+
+        background:
+            linear-gradient(
+                135deg,
+                #7c4dce,
+                #6f42c1
+            );
+
+        color: white;
+
+        box-shadow:
+            0 5px 15px
+            rgba(111, 66, 193, 0.3);
+
+    }
+
+
+    .sidebar-section {
+
+        font-size: 10px;
+
+        text-transform: uppercase;
+
+        letter-spacing: 1px;
+
+        opacity: 0.4;
+
+        padding:
+            20px 14px 8px;
+
+    }
+
+
+    .coming-soon {
+
+        margin-left: auto;
+
+        font-size: 9px;
+
+        padding:
+            3px 6px;
+
+        border-radius: 5px;
+
+        background:
+            rgba(255,255,255,0.1);
+
+        opacity: 0.7;
+
+    }
+
+
+    /* =====================================
+       CONTEÚDO
+    ===================================== */
+
+    .main-content {
+
+        margin-left:
+            var(--sidebar-width);
+
+        padding:
+            100px 35px 35px;
+
+        min-height:
+            100vh;
+
+    }
+
+
+    /* =====================================
+       CARDS
+    ===================================== */
+
+    .card {
+
+        border: none;
+
+        border-radius: 14px;
+
+        box-shadow:
+            0 4px 20px
+            rgba(45, 35, 70, 0.06);
+
+    }
+
+
+    .card-header {
+
+        background: white;
+
+        border-bottom:
+            1px solid
+            rgba(0,0,0,0.05);
+
+    }
+
+
+    /* =====================================
+       BOTÕES
+    ===================================== */
+
+    .btn-primary {
+
+        background:
+            linear-gradient(
+                135deg,
+                var(--roxo-principal),
+                var(--roxo-claro)
+            );
+
+        border: none;
+
+        box-shadow:
+            0 4px 12px
+            rgba(111,66,193,0.25);
+
+    }
+
+
+    .btn-primary:hover {
+
+        background:
+            linear-gradient(
+                135deg,
+                var(--roxo-escuro),
+                var(--roxo-principal)
+            );
+
+        transform:
+            translateY(-1px);
+
+    }
+
+
+    /* =====================================
+       TABELAS
+    ===================================== */
+
+    .table {
+
+        margin-bottom: 0;
+
+    }
+
+
+    .table thead th {
+
+        font-size: 12px;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.4px;
+
+        color:
+            #777;
+
+        font-weight: 600;
+
+    }
+
+
+    /* =====================================
+       RESPONSIVIDADE
+    ===================================== */
+
+    @media (
+        max-width: 768px
+    ) {
+
+        :root {
+
+            --sidebar-width: 0px;
+
+        }
+
+
+        .sidebar {
+
+            width: 250px;
+
+            transform:
+                translateX(-100%);
+
+            transition:
+                transform 0.3s ease;
+
+        }
+
+
+        .sidebar.show {
+
+            transform:
+                translateX(0);
+
+        }
+
+
+        .topbar {
+
+            left: 0;
+
+            padding:
+                0 15px;
+
+        }
+
+
+        .main-content {
+
+            margin-left: 0;
+
+            padding:
+                90px 15px 25px;
+
+        }
+
+
+        .user-name {
+
+            display: none;
+
+        }
+
+    }
+
+</style>
+
+
+</head>
+
+<body>
+
+<!-- =====================================
+     SIDEBAR
+===================================== -->
+
+<aside class="sidebar">
+
+<!-- LOGO -->
+
+
+<div class="brand">
+
+
+    <div class="brand-icon">
+
+        <i class="bi bi-heart-pulse-fill"></i>
+
+    </div>
+
+
+    <div>
+
+        <div class="brand-text">
+
+            ClinGest
+
+        </div>
+
+
+        <span class="brand-subtitle">
+
+            Gestão inteligente
+
+        </span>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- MENU -->
+
+
+<div class="sidebar-menu">
+
+
+    <div class="sidebar-section">
+
+        Principal
+
+    </div>
+
+
+    <a
+    href="{% url 'dashboard:dashboard' %}"
+    class="sidebar-link {% if request.resolver_match.app_name == 'dashboard' %}active{% endif %}"
+>
+
+        <i class="bi bi-grid-1x2-fill"></i>
+
+        Dashboard
+
+    </a>
+
+
+    <a
+    href="{% url 'agendamentos:agenda' %}"
+    class="sidebar-link {% if request.resolver_match.app_name == 'agendamentos' %}active{% endif %}"
+>
+
+        <i class="bi bi-calendar3"></i>
+
+        Agenda
+
+    </a>
+
+
+
+    <div class="sidebar-section">
+
+        Cadastros
+
+    </div>
+
+
+    <a
+    href="{% url 'pacientes:lista' %}"
+    class="sidebar-link {% if request.resolver_match.app_name == 'pacientes' %}active{% endif %}"
+>
+
+        <i class="bi bi-people-fill"></i>
+
+        Pacientes
+
+    </a>
+
+
+    <a
+    href="{% url 'profissionais:lista' %}"
+    class="sidebar-link {% if request.resolver_match.app_name == 'profissionais' %}active{% endif %}"
+>
+
+        <i class="bi bi-person-badge-fill"></i>
+
+        Profissionais
+
+    </a>
+
+
+    <a
+    href="{% url 'servicos:lista' %}"
+    class="sidebar-link {% if request.resolver_match.app_name == 'servicos' %}active{% endif %}"
+>
+
+        <i class="bi bi-heart-pulse"></i>
+
+        Serviços
+
+    </a>
+
+
+
+    <div class="sidebar-section">
+
+        Gestão
+
+    </div>
+
+
+    <a
+        href="#"
+        class="sidebar-link"
+    >
+
+        <i class="bi bi-clipboard2-pulse"></i>
+
+        Atendimentos
+
+        <span class="coming-soon">
+
+            Em breve
+
+        </span>
+
+    </a>
+
+
+    <a
+        href="#"
+        class="sidebar-link"
+    >
+
+        <i class="bi bi-cash-coin"></i>
+
+        Financeiro
+
+        <span class="coming-soon">
+
+            Em breve
+
+        </span>
+
+    </a>
+
+
+    <a
+        href="#"
+        class="sidebar-link"
+    >
+
+        <i class="bi bi-bar-chart-fill"></i>
+
+        Relatórios
+
+        <span class="coming-soon">
+
+            Em breve
+
+        </span>
+
+    </a>
+
+
+</div>
+
+</aside>
+
+<!-- =====================================
+     TOPBAR
+===================================== -->
+
+<header class="topbar">
+
+
+<div class="topbar-title">
+
+    {% block page_title %}
+
+       <!-- ClinGest -->
+
+    {% endblock %}
+
+</div>
+
+
+<div class="user-area">
+
+
+    <div class="user-avatar">
+
+        {{ user.nome|first|upper }}
+
+    </div>
+
+
+    <div class="user-name">
+
+        {{ user.nome }}
+
+    </div>
+
+
+    <form
+        method="post"
+        action="{% url 'logout' %}"
+    >
+
+        {% csrf_token %}
+
+
+        <button
+            type="submit"
+            class="logout-btn"
+            title="Sair"
+        >
+
+            <i class="bi bi-box-arrow-right"></i>
+
+        </button>
+
+    </form>
+
+
+</div>
+
+
+</header>
+
+<!-- =====================================
+     CONTEÚDO
+===================================== -->
+
+<main class="main-content">
+
+
+{% block content %}
+
+{% endblock %}
+
+
+</main>
+
+<!-- BOOTSTRAP -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+<!-- JAVASCRIPT EXTRA -->
+
+{% block extra_js %}
+
+{% endblock %}
+
+</body>
+
+</html>

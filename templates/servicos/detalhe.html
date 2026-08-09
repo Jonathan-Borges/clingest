@@ -1,0 +1,835 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+
+{{ servico.nome }}
+
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-2">
+
+
+<!-- CABEÇALHO -->
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+
+    <div class="d-flex align-items-center gap-3">
+
+
+        <div
+            class="rounded-3 d-flex align-items-center justify-content-center"
+            style="
+                width: 60px;
+                height: 60px;
+                background: rgba(111, 66, 193, 0.10);
+                color: #6f42c1;
+                font-size: 28px;
+            "
+        >
+
+            🩺
+
+        </div>
+
+
+        <div>
+
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+
+
+                <h2 class="fw-bold mb-0">
+
+                    {{ servico.nome }}
+
+                </h2>
+
+
+                {% if servico.ativo %}
+
+                    <span class="badge rounded-pill bg-success px-3 py-2">
+
+                        Ativo
+
+                    </span>
+
+                {% else %}
+
+                    <span class="badge rounded-pill bg-danger px-3 py-2">
+
+                        Inativo
+
+                    </span>
+
+                {% endif %}
+
+
+            </div>
+
+
+            <p class="text-muted mb-0 mt-1">
+
+                Detalhes e configurações do serviço.
+
+            </p>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- AÇÕES -->
+
+    <div class="d-flex gap-2">
+
+
+        <a
+            href="{% url 'servicos:editar' servico.pk %}"
+            class="btn btn-primary px-4"
+        >
+
+            ✏️ Editar
+
+        </a>
+
+
+        <a
+            href="{% url 'servicos:lista' %}"
+            class="btn btn-outline-secondary px-4"
+        >
+
+            ← Voltar
+
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- CARDS PRINCIPAIS -->
+
+<div class="row g-4 mb-4">
+
+
+    <!-- VALOR -->
+
+    <div class="col-md-4">
+
+
+        <div class="card border-0 shadow-sm h-100">
+
+
+            <div class="card-body p-4">
+
+
+                <div class="d-flex justify-content-between align-items-start">
+
+
+                    <div>
+
+
+                        <small class="text-muted fw-semibold">
+
+                            VALOR DO SERVIÇO
+
+                        </small>
+
+
+                        <h3 class="fw-bold mt-2 mb-0 text-success">
+
+                            R$
+
+                            {{ servico.valor|floatformat:2 }}
+
+                        </h3>
+
+
+                    </div>
+
+
+                    <div
+                        class="rounded-3 d-flex align-items-center justify-content-center"
+                        style="
+                            width: 45px;
+                            height: 45px;
+                            background: rgba(25, 135, 84, 0.10);
+                            font-size: 22px;
+                        "
+                    >
+
+                        💰
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- DURAÇÃO -->
+
+    <div class="col-md-4">
+
+
+        <div class="card border-0 shadow-sm h-100">
+
+
+            <div class="card-body p-4">
+
+
+                <div class="d-flex justify-content-between align-items-start">
+
+
+                    <div>
+
+
+                        <small class="text-muted fw-semibold">
+
+                            DURAÇÃO
+
+                        </small>
+
+
+                        <h3 class="fw-bold mt-2 mb-0">
+
+                            {{ servico.duracao_minutos }}
+
+                            <small class="fs-6 text-muted">
+
+                                minutos
+
+                            </small>
+
+                        </h3>
+
+
+                    </div>
+
+
+                    <div
+                        class="rounded-3 d-flex align-items-center justify-content-center"
+                        style="
+                            width: 45px;
+                            height: 45px;
+                            background: rgba(111, 66, 193, 0.10);
+                            color: #6f42c1;
+                            font-size: 22px;
+                        "
+                    >
+
+                        ⏱️
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- PROFISSIONAIS -->
+
+    <div class="col-md-4">
+
+
+        <div class="card border-0 shadow-sm h-100">
+
+
+            <div class="card-body p-4">
+
+
+                <div class="d-flex justify-content-between align-items-start">
+
+
+                    <div>
+
+
+                        <small class="text-muted fw-semibold">
+
+                            PROFISSIONAIS
+
+                        </small>
+
+
+                        <h3 class="fw-bold mt-2 mb-0">
+
+                            {{ profissionais|length }}
+
+                        </h3>
+
+
+                        <small class="text-muted">
+
+                            profissionais habilitados
+
+                        </small>
+
+
+                    </div>
+
+
+                    <div
+                        class="rounded-3 d-flex align-items-center justify-content-center"
+                        style="
+                            width: 45px;
+                            height: 45px;
+                            background: rgba(13, 110, 253, 0.10);
+                            font-size: 22px;
+                        "
+                    >
+
+                        👨‍⚕️
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- INFORMAÇÕES DO SERVIÇO -->
+
+<div class="row g-4">
+
+
+    <div class="col-lg-5">
+
+
+        <div class="card border-0 shadow-sm h-100">
+
+
+            <div class="card-header bg-white border-0 p-4">
+
+
+                <h5 class="fw-bold mb-1">
+
+                    📋 Informações do serviço
+
+                </h5>
+
+
+                <small class="text-muted">
+
+                    Dados cadastrados para este serviço.
+
+                </small>
+
+
+            </div>
+
+
+            <div class="card-body p-4">
+
+
+                <div class="mb-4">
+
+
+                    <small class="text-muted d-block mb-1">
+
+                        Nome
+
+                    </small>
+
+
+                    <strong>
+
+                        {{ servico.nome }}
+
+                    </strong>
+
+
+                </div>
+
+
+
+                <div class="mb-4">
+
+
+                    <small class="text-muted d-block mb-1">
+
+                        Descrição
+
+                    </small>
+
+
+                    {% if servico.descricao %}
+
+                        <p class="mb-0">
+
+                            {{ servico.descricao }}
+
+                        </p>
+
+                    {% else %}
+
+                        <span class="text-muted">
+
+                            Nenhuma descrição informada.
+
+                        </span>
+
+                    {% endif %}
+
+
+                </div>
+
+
+
+                <div class="mb-4">
+
+
+                    <small class="text-muted d-block mb-1">
+
+                        Data de cadastro
+
+                    </small>
+
+
+                    <strong>
+
+                        {{ servico.data_cadastro|date:"d/m/Y H:i" }}
+
+                    </strong>
+
+
+                </div>
+
+
+
+                <div>
+
+
+                    <small class="text-muted d-block mb-1">
+
+                        Status
+
+                    </small>
+
+
+                    {% if servico.ativo %}
+
+                        <span class="badge bg-success">
+
+                            Serviço ativo
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-danger">
+
+                            Serviço inativo
+
+                        </span>
+
+                    {% endif %}
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- PROFISSIONAIS VINCULADOS -->
+
+    <div class="col-lg-7">
+
+
+        <div class="card border-0 shadow-sm h-100">
+
+
+            <div class="card-header bg-white border-0 p-4">
+
+
+                <div class="d-flex justify-content-between align-items-center">
+
+
+                    <div>
+
+
+                        <h5 class="fw-bold mb-1">
+
+                            👨‍⚕️ Profissionais habilitados
+
+                        </h5>
+
+
+                        <small class="text-muted">
+
+                            Profissionais que podem realizar este serviço.
+
+                        </small>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="card-body p-0">
+
+
+                {% if profissionais %}
+
+
+                    <div class="table-responsive">
+
+
+                        <table class="table table-hover align-middle mb-0">
+
+
+                            <thead class="table-light">
+
+
+                                <tr>
+
+
+                                    <th class="px-4">
+
+                                        Profissional
+
+                                    </th>
+
+
+                                    <th>
+
+                                        Especialidade
+
+                                    </th>
+
+
+                                    <th>
+
+                                        Duração
+
+                                    </th>
+
+
+                                    <th>
+
+                                        Valor
+
+                                    </th>
+
+
+                                    <th>
+
+                                        Status
+
+                                    </th>
+
+
+                                </tr>
+
+
+                            </thead>
+
+
+                            <tbody>
+
+
+                                {% for item in profissionais %}
+
+
+                                    <tr>
+
+
+                                        <td class="px-4">
+
+
+                                            <div class="d-flex align-items-center gap-3">
+
+
+                                                <div
+                                                    class="rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                                                    style="
+                                                        width: 40px;
+                                                        height: 40px;
+                                                        background: rgba(111, 66, 193, 0.10);
+                                                        color: #6f42c1;
+                                                    "
+                                                >
+
+                                                    {{ item.profissional.nome_completo|first|upper }}
+
+                                                </div>
+
+
+                                                <div>
+
+
+                                                    <strong class="d-block">
+
+                                                        {{ item.profissional.nome_completo }}
+
+                                                    </strong>
+
+
+                                                    <small class="text-muted">
+
+                                                        ID #{{ item.profissional.pk }}
+
+                                                    </small>
+
+
+                                                </div>
+
+
+                                            </div>
+
+
+                                        </td>
+
+
+                                        <td>
+
+                                            {{ item.profissional.get_especialidade_display }}
+
+                                        </td>
+
+
+                                        <td>
+
+                                            {{ item.duracao_minutos }}
+
+                                            min
+
+                                        </td>
+
+
+                                        <td>
+
+
+                                            <strong>
+
+                                                R$
+
+                                                {{ item.valor|floatformat:2 }}
+
+                                            </strong>
+
+
+                                        </td>
+
+
+                                        <td>
+
+
+                                            {% if item.ativo %}
+
+                                                <span class="badge bg-success">
+
+                                                    Ativo
+
+                                                </span>
+
+                                            {% else %}
+
+                                                <span class="badge bg-secondary">
+
+                                                    Inativo
+
+                                                </span>
+
+                                            {% endif %}
+
+
+                                        </td>
+
+
+                                    </tr>
+
+
+                                {% endfor %}
+
+
+                            </tbody>
+
+
+                        </table>
+
+
+                    </div>
+
+
+                {% else %}
+
+
+                    <div class="text-center py-5 px-4">
+
+
+                        <div
+                            class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                            style="
+                                width: 75px;
+                                height: 75px;
+                                background: rgba(111, 66, 193, 0.10);
+                                color: #6f42c1;
+                                font-size: 32px;
+                            "
+                        >
+
+                            👨‍⚕️
+
+                        </div>
+
+
+                        <h5 class="fw-bold">
+
+                            Nenhum profissional vinculado
+
+                        </h5>
+
+
+                        <p class="text-muted mb-0">
+
+                            Este serviço ainda não está configurado
+                            para nenhum profissional.
+
+                        </p>
+
+
+                    </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ZONA DE PERIGO -->
+
+{% if servico.ativo %}
+
+
+    <div class="card border-0 shadow-sm mt-4">
+
+
+        <div class="card-body p-4">
+
+
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+
+
+                <div>
+
+
+                    <h5 class="fw-bold text-danger mb-1">
+
+                        Inativar serviço
+
+                    </h5>
+
+
+                    <p class="text-muted mb-0">
+
+                        O serviço será removido da lista de serviços ativos,
+                        mas seus dados históricos serão preservados.
+
+                    </p>
+
+
+                </div>
+
+
+                <form
+                    method="post"
+                    action="{% url 'servicos:excluir' servico.pk %}"
+                >
+
+
+                    {% csrf_token %}
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-outline-danger px-4"
+                        onclick="return confirm('Tem certeza que deseja inativar este serviço?')"
+                    >
+
+                        Inativar serviço
+
+                    </button>
+
+
+                </form>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+{% endif %}
+
+
+</div>
+
+{% endblock %}

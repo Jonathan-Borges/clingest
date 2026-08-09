@@ -1,0 +1,500 @@
+{% extends "base.html" %}
+
+{% block title %}
+Financeiro
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row g-4 mb-4">
+
+    <div class="col-lg-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <small class="text-muted">
+                    Saldo Atual
+                </small>
+
+                <h2 class="fw-bold text-primary mt-2">
+
+                    R$ {{ saldo|floatformat:2 }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-lg-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <small class="text-muted">
+
+                    Receitas
+
+                </small>
+
+                <h2 class="fw-bold text-success mt-2">
+
+                    R$ {{ receitas|floatformat:2 }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-lg-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <small class="text-muted">
+
+                    Despesas
+
+                </small>
+
+                <h2 class="fw-bold text-danger mt-2">
+
+                    R$ {{ despesas|floatformat:2 }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-lg-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <small class="text-muted">
+
+                    Pendentes
+
+                </small>
+
+                <h2 class="fw-bold text-warning mt-2">
+
+                    R$ {{ pendentes|floatformat:2 }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="fw-bold mb-1">
+
+            💰 Financeiro
+
+        </h2>
+
+        <small class="text-muted">
+
+            Controle financeiro da clínica
+
+        </small>
+
+    </div>
+
+    <a
+        href="{% url 'financeiro:novo' %}"
+        class="btn btn-primary"
+    >
+
+        + Nova Movimentação
+
+    </a>
+
+    
+
+</div>
+
+<div class="card border-0 shadow-sm">
+
+    <div class="card-header bg-white border-0 p-4">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <div>
+
+                <h5 class="fw-bold mb-1">
+
+                    Movimentações
+
+                </h5>
+
+                <small class="text-muted">
+
+                    Histórico financeiro da clínica
+
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body p-0">
+
+
+        {% if movimentacoes %}
+
+
+        <div class="table-responsive">
+
+
+            <table class="table table-hover align-middle mb-0">
+
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th class="px-4">
+                            Categoria
+                        </th>
+
+                        <th>
+                            Tipo
+                        </th>
+
+                        <th>
+                            Paciente
+                        </th>
+
+                        <th>
+                            Profissional
+                        </th>
+
+                        <th>
+                            Pagamento
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Valor
+                        </th>
+
+                        <th>
+                            Data
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                {% for movimentacao in movimentacoes %}
+
+
+                    <tr>
+
+
+                        <!-- CATEGORIA -->
+
+                        <td class="px-4">
+
+
+                            <div class="fw-semibold">
+
+                                {{ movimentacao.categoria }}
+
+                            </div>
+
+
+                            {% if movimentacao.servico %}
+
+                            <small class="text-muted">
+
+                                {{ movimentacao.servico.nome }}
+
+                            </small>
+
+                            {% endif %}
+
+
+                        </td>
+
+
+
+                        <!-- TIPO -->
+
+                        <td>
+
+
+                            {% if movimentacao.tipo == "RECEITA" %}
+
+
+                                <span class="badge bg-success">
+
+                                    Receita
+
+                                </span>
+
+
+                            {% else %}
+
+
+                                <span class="badge bg-danger">
+
+                                    Despesa
+
+                                </span>
+
+
+                            {% endif %}
+
+
+                        </td>
+
+
+
+                        <!-- PACIENTE -->
+
+                        <td>
+
+
+                            {% if movimentacao.paciente %}
+
+
+                                {{ movimentacao.paciente.nome_completo }}
+
+
+                            {% else %}
+
+
+                                <span class="text-muted">
+
+                                    -
+
+                                </span>
+
+
+                            {% endif %}
+
+
+                        </td>
+
+
+
+                        <!-- PROFISSIONAL -->
+
+                        <td>
+
+
+                            {% if movimentacao.profissional %}
+
+
+                                {{ movimentacao.profissional.nome_completo }}
+
+
+                            {% else %}
+
+
+                                <span class="text-muted">
+
+                                    -
+
+                                </span>
+
+
+                            {% endif %}
+
+
+                        </td>
+
+
+
+
+                        <!-- PAGAMENTO -->
+
+                        <td>
+
+
+                            {{ movimentacao.get_forma_pagamento_display|default:"-" }}
+
+
+                        </td>
+
+
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+
+                            {% if movimentacao.status == "PAGO" %}
+
+
+                                <span class="badge bg-success-subtle text-success">
+
+                                    Pago
+
+                                </span>
+
+
+                            {% elif movimentacao.status == "PENDENTE" %}
+
+
+                                <span class="badge bg-warning-subtle text-warning">
+
+                                    Pendente
+
+                                </span>
+
+
+                            {% else %}
+
+
+                                <span class="badge bg-secondary">
+
+                                    Cancelado
+
+                                </span>
+
+
+                            {% endif %}
+
+
+                        </td>
+
+
+
+                        <!-- VALOR -->
+
+                        <td>
+
+
+                            {% if movimentacao.tipo == "RECEITA" %}
+
+
+                                <strong class="text-success">
+
+                                    + R$ {{ movimentacao.valor|floatformat:2 }}
+
+                                </strong>
+
+
+                            {% else %}
+
+
+                                <strong class="text-danger">
+
+                                    - R$ {{ movimentacao.valor|floatformat:2 }}
+
+                                </strong>
+
+
+                            {% endif %}
+
+
+                        </td>
+
+
+
+
+                        <!-- DATA -->
+
+                        <td>
+
+
+                            {{ movimentacao.data|date:"d/m/Y" }}
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                {% endfor %}
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+
+        {% else %}
+
+
+
+        <div class="text-center py-5">
+
+
+            <div class="fs-1 mb-3">
+
+                💰
+
+            </div>
+
+
+            <h4 class="fw-bold">
+
+                Nenhuma movimentação cadastrada
+
+            </h4>
+
+
+            <p class="text-muted">
+
+                Comece adicionando receitas ou despesas.
+
+            </p>
+
+
+        </div>
+
+
+        {% endif %}
+
+
+
+    </div>
+
+</div>
+{% endblock %}

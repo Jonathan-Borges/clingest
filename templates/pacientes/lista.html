@@ -1,0 +1,997 @@
+{% extends "base.html" %}
+
+{% block title %}
+Pacientes
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================
+   PACIENTES PREMIUM
+========================================= */
+
+.pacientes-page {
+    animation: fadeIn 0.35s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================
+   CABEÇALHO
+========================================= */
+
+.pacientes-header {
+    margin-bottom: 28px;
+}
+
+.pacientes-title {
+    font-weight: 700;
+    color: #2b2340;
+    letter-spacing: -0.5px;
+}
+
+.pacientes-subtitle {
+    color: #81788f;
+}
+
+
+/* =========================================
+   BOTÃO PRINCIPAL
+========================================= */
+
+.btn-premium {
+    background:
+        linear-gradient(
+            135deg,
+            #6f42c1,
+            #8b5cf6
+        );
+
+    border:
+        none;
+
+    color:
+        #ffffff;
+
+    font-weight:
+        600;
+
+    border-radius:
+        10px;
+
+    padding:
+        11px 20px;
+
+    box-shadow:
+        0 6px 16px
+        rgba(
+            111,
+            66,
+            193,
+            0.20
+        );
+
+    transition:
+        all 0.2s ease;
+}
+
+.btn-premium:hover {
+    color:
+        #ffffff;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 9px 22px
+        rgba(
+            111,
+            66,
+            193,
+            0.30
+        );
+}
+
+
+/* =========================================
+   CARD DE BUSCA
+========================================= */
+
+.search-card {
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        #eeeaf5;
+
+    border-radius:
+        16px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(
+            44,
+            34,
+            64,
+            0.05
+        );
+}
+
+.search-wrapper {
+    position:
+        relative;
+}
+
+.search-icon {
+    position:
+        absolute;
+
+    left:
+        16px;
+
+    top:
+        50%;
+
+    transform:
+        translateY(-50%);
+
+    color:
+        #8b7da3;
+
+    z-index:
+        5;
+}
+
+.search-input {
+    height:
+        48px;
+
+    padding-left:
+        45px;
+
+    border:
+        1px solid
+        #e5dfef;
+
+    border-radius:
+        10px !important;
+
+    transition:
+        all 0.2s ease;
+}
+
+.search-input:focus {
+    border-color:
+        #8b5cf6;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(
+            139,
+            92,
+            246,
+            0.10
+        );
+}
+
+
+/* =========================================
+   CARD DA LISTA
+========================================= */
+
+.pacientes-card {
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        #eeeaf5;
+
+    border-radius:
+        16px;
+
+    overflow:
+        hidden;
+
+    box-shadow:
+        0 8px 25px
+        rgba(
+            44,
+            34,
+            64,
+            0.05
+        );
+}
+
+.pacientes-card-header {
+    padding:
+        22px 24px;
+
+    border-bottom:
+        1px solid
+        #f0edf5;
+
+    background:
+        #ffffff;
+}
+
+
+/* =========================================
+   CONTADOR
+========================================= */
+
+.pacientes-count {
+    background:
+        rgba(
+            111,
+            66,
+            193,
+            0.10
+        );
+
+    color:
+        #6f42c1;
+
+    font-weight:
+        600;
+
+    border-radius:
+        20px;
+
+    padding:
+        7px 14px;
+}
+
+
+/* =========================================
+   TABELA
+========================================= */
+
+.pacientes-table {
+    margin-bottom:
+        0;
+}
+
+.pacientes-table thead th {
+    background:
+        #faf9fc;
+
+    color:
+        #746b82;
+
+    font-size:
+        0.75rem;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.05em;
+
+    font-weight:
+        700;
+
+    border:
+        none;
+
+    padding:
+        15px 20px;
+}
+
+.pacientes-table tbody td {
+    padding:
+        17px 20px;
+
+    border-color:
+        #f1eef5;
+
+    color:
+        #40384d;
+}
+
+.pacientes-table tbody tr {
+    transition:
+        background 0.2s ease;
+}
+
+.pacientes-table tbody tr:hover {
+    background:
+        #faf8ff;
+}
+
+
+/* =========================================
+   AVATAR
+========================================= */
+
+.paciente-avatar {
+    width:
+        44px;
+
+    height:
+        44px;
+
+    border-radius:
+        12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eee5ff,
+            #e1d4ff
+        );
+
+    color:
+        #6f42c1;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    font-weight:
+        700;
+
+    font-size:
+        1rem;
+
+    flex-shrink:
+        0;
+}
+
+
+/* =========================================
+   NOME
+========================================= */
+
+.paciente-nome {
+    color:
+        #30283d;
+
+    font-weight:
+        600;
+}
+
+.paciente-id {
+    font-size:
+        0.75rem;
+
+    color:
+        #978da4;
+}
+
+
+/* =========================================
+   BOTÕES DE AÇÃO
+========================================= */
+
+.btn-action {
+    width:
+        36px;
+
+    height:
+        36px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        9px;
+
+    transition:
+        all 0.2s ease;
+}
+
+.btn-view {
+    color:
+        #6f42c1;
+
+    border:
+        1px solid
+        #d9c9f5;
+
+    background:
+        #faf8ff;
+}
+
+.btn-view:hover {
+    background:
+        #6f42c1;
+
+    color:
+        #ffffff;
+}
+
+.btn-edit {
+    color:
+        #8a6d1d;
+
+    border:
+        1px solid
+        #eadcae;
+
+    background:
+        #fffdf3;
+}
+
+.btn-edit:hover {
+    background:
+        #d9a900;
+
+    color:
+        #ffffff;
+}
+
+
+/* =========================================
+   ESTADO VAZIO
+========================================= */
+
+.empty-state {
+    padding:
+        70px 30px;
+}
+
+.empty-icon {
+    width:
+        90px;
+
+    height:
+        90px;
+
+    border-radius:
+        24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f0e9ff,
+            #e5d9ff
+        );
+
+    color:
+        #6f42c1;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    font-size:
+        40px;
+
+    margin-bottom:
+        20px;
+}
+
+
+/* =========================================
+   RESPONSIVIDADE
+========================================= */
+
+@media (
+    max-width: 768px
+) {
+
+    .pacientes-table thead {
+        display:
+            none;
+    }
+
+    .pacientes-table tbody tr {
+        display:
+            block;
+
+        padding:
+            15px;
+
+        border-bottom:
+            1px solid #eee;
+    }
+
+    .pacientes-table tbody td {
+        display:
+            block;
+
+        padding:
+            8px 10px;
+
+        border:
+            none;
+    }
+
+    .pacientes-table tbody td:last-child {
+        text-align:
+            left !important;
+    }
+
+    .pacientes-card-header {
+        padding:
+            18px;
+    }
+
+}
+
+</style>
+
+<div class="container-fluid pacientes-page">
+
+
+<!-- =====================================
+     CABEÇALHO
+====================================== -->
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 pacientes-header">
+
+    <div>
+
+        <h2 class="pacientes-title mb-1">
+
+            👤 Pacientes
+
+        </h2>
+
+        <p class="pacientes-subtitle mb-0">
+
+            Gerencie os pacientes cadastrados na clínica.
+
+        </p>
+
+    </div>
+
+
+    <a
+        href="{% url 'pacientes:criar' %}"
+        class="btn btn-premium"
+    >
+
+        ✚ Novo paciente
+
+    </a>
+
+</div>
+
+
+
+<!-- =====================================
+     BUSCA
+====================================== -->
+
+<div class="card search-card border-0 mb-4">
+
+    <div class="card-body p-4">
+
+        <form
+            method="get"
+            class="row g-3"
+        >
+
+            <div class="col-12 col-md">
+
+                <div class="search-wrapper">
+
+                    <span class="search-icon">
+
+                        🔍
+
+                    </span>
+
+                    <input
+                        type="text"
+                        name="busca"
+                        class="form-control search-input"
+                        placeholder="Buscar por nome, CPF, telefone ou e-mail..."
+                        value="{{ busca }}"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="col-12 col-md-auto">
+
+                <button
+                    type="submit"
+                    class="btn btn-premium w-100 px-4"
+                >
+
+                    Pesquisar
+
+                </button>
+
+            </div>
+
+
+            {% if busca %}
+
+            <div class="col-12 col-md-auto">
+
+                <a
+                    href="{% url 'pacientes:lista' %}"
+                    class="btn btn-outline-secondary w-100"
+                >
+
+                    Limpar
+
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </form>
+
+
+        {% if busca %}
+
+        <div class="mt-3 small text-muted">
+
+            Resultados encontrados para:
+
+            <strong class="text-dark">
+
+                "{{ busca }}"
+
+            </strong>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================
+     LISTA DE PACIENTES
+====================================== -->
+
+<div class="pacientes-card">
+
+
+    <!-- CABEÇALHO DA LISTA -->
+
+    <div class="pacientes-card-header">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <div>
+
+                <h5 class="fw-bold mb-1">
+
+                    Lista de pacientes
+
+                </h5>
+
+                <small class="text-muted">
+
+                    Pacientes cadastrados no sistema
+
+                </small>
+
+            </div>
+
+
+            {% if pacientes %}
+
+            <span class="pacientes-count">
+
+                {{ pacientes|length }}
+
+                paciente{{ pacientes|length|pluralize }}
+
+            </span>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- CONTEÚDO -->
+
+    {% if pacientes %}
+
+    <div class="table-responsive">
+
+        <table class="table pacientes-table align-middle">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+
+                        Paciente
+
+                    </th>
+
+                    <th>
+
+                        CPF
+
+                    </th>
+
+                    <th>
+
+                        Telefone
+
+                    </th>
+
+                    <th>
+
+                        E-mail
+
+                    </th>
+
+                    <th class="text-end">
+
+                        Ações
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for paciente in pacientes %}
+
+                <tr>
+
+
+                    <!-- PACIENTE -->
+
+                    <td>
+
+                        <div class="d-flex align-items-center gap-3">
+
+                            <div class="paciente-avatar">
+
+                                {{ paciente.nome_completo|first|upper }}
+
+                            </div>
+
+                            <div>
+
+                                <div class="paciente-nome">
+
+                                    {{ paciente.nome_completo }}
+
+                                </div>
+
+                                <div class="paciente-id">
+
+                                    ID #{{ paciente.pk }}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- CPF -->
+
+                    <td>
+
+                        {% if paciente.cpf %}
+
+                            {{ paciente.cpf }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+
+                                Não informado
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- TELEFONE -->
+
+                    <td>
+
+                        {% if paciente.telefone %}
+
+                            📞 {{ paciente.telefone }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+
+                                Não informado
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- EMAIL -->
+
+                    <td>
+
+                        {% if paciente.email %}
+
+                            {{ paciente.email }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+
+                                Não informado
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- AÇÕES -->
+
+                    <td class="text-end">
+
+                        <div class="d-inline-flex gap-2">
+
+
+                            <a
+                                href="{% url 'pacientes:detalhe' paciente.pk %}"
+                                class="btn-action btn-view"
+                                title="Visualizar paciente"
+                            >
+
+                                👁️
+
+                            </a>
+
+
+                            <a
+                                href="{% url 'pacientes:editar' paciente.pk %}"
+                                class="btn-action btn-edit"
+                                title="Editar paciente"
+                            >
+
+                                ✏️
+
+                            </a>
+
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    {% else %}
+
+
+    <!-- =====================================
+         ESTADO VAZIO
+    ====================================== -->
+
+    <div class="text-center empty-state">
+
+        <div class="empty-icon">
+
+            👤
+
+        </div>
+
+
+        {% if busca %}
+
+            <h4 class="fw-bold">
+
+                Nenhum paciente encontrado
+
+            </h4>
+
+            <p class="text-muted mb-4">
+
+                Não encontramos nenhum paciente correspondente à pesquisa:
+
+                <strong>
+
+                    "{{ busca }}"
+
+                </strong>
+
+            </p>
+
+            <a
+                href="{% url 'pacientes:lista' %}"
+                class="btn btn-outline-secondary"
+            >
+
+                Limpar pesquisa
+
+            </a>
+
+        {% else %}
+
+            <h4 class="fw-bold">
+
+                Nenhum paciente cadastrado
+
+            </h4>
+
+            <p class="text-muted mb-4">
+
+                Ainda não existem pacientes cadastrados no sistema.
+
+            </p>
+
+            <a
+                href="{% url 'pacientes:criar' %}"
+                class="btn btn-premium px-4"
+            >
+
+                ✚ Cadastrar primeiro paciente
+
+            </a>
+
+        {% endif %}
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+</div>
+
+{% endblock %}

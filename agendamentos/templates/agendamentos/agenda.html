@@ -1,0 +1,1093 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+Agenda
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+<!-- CABEÇALHO -->
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h1 class="fw-bold mb-1">
+
+            📅 Agenda da Clínica
+
+        </h1>
+
+        <p class="text-muted mb-0">
+
+            Visualização dos atendimentos agendados.
+
+        </p>
+
+    </div>
+
+
+    <a
+        href="{% url 'agendamentos:criar' %}"
+        class="btn btn-primary"
+    >
+
+        ➕ Novo Agendamento
+
+    </a>
+
+</div>
+
+
+
+<!-- CALENDÁRIO -->
+
+<div class="card border-0 shadow-sm">
+
+    <div class="card-body p-3 p-md-4">
+
+        <div id="calendar"></div>
+
+    </div>
+
+</div>
+
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<!-- FULLCALENDAR CSS -->
+
+<link
+    href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css"
+    rel="stylesheet"
+/>
+
+
+<style>
+
+
+    /*
+    EVENTO PREMIUM
+    */
+
+    .evento-card-premium {
+
+        width: 100%;
+
+        padding: 7px 9px;
+
+        border-radius: 8px;
+
+        overflow: hidden;
+
+        color: white;
+
+        line-height: 1.25;
+
+        cursor: pointer;
+
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+
+    }
+
+
+
+    /*
+    HOVER DO EVENTO
+    */
+
+    .evento-card-premium:hover {
+
+        transform:
+            translateY(-1px);
+
+        box-shadow:
+            0 5px 12px
+            rgba(0, 0, 0, 0.20);
+
+    }
+
+
+
+    /*
+    TOPO DO EVENTO
+    */
+
+    .evento-topo {
+
+        display: flex;
+
+        justify-content:
+            space-between;
+
+        align-items:
+            center;
+
+        gap: 5px;
+
+        margin-bottom: 4px;
+
+    }
+
+
+
+    /*
+    HORÁRIO
+    */
+
+    .evento-horario {
+
+        font-size:
+            0.75rem;
+
+        font-weight:
+            700;
+
+        white-space:
+            nowrap;
+
+    }
+
+
+
+    /*
+    STATUS
+    */
+
+    .evento-status {
+
+        font-size:
+            0.65rem;
+
+        padding:
+            2px 6px;
+
+        border-radius:
+            20px;
+
+        background:
+            rgba(255, 255, 255, 0.20);
+
+        white-space:
+            nowrap;
+
+        overflow:
+            hidden;
+
+        text-overflow:
+            ellipsis;
+
+    }
+
+
+
+    /*
+    PACIENTE  
+    */
+
+    .evento-paciente {
+
+        font-size:
+            0.82rem;
+
+        font-weight:
+            700;
+
+        white-space:
+            nowrap;
+
+        overflow:
+            hidden;
+
+        text-overflow:
+            ellipsis;
+
+        margin-bottom:
+            3px;
+
+    }
+
+
+
+    /*
+    SERVIÇO
+    */
+
+    .evento-servico {
+
+        font-size:
+            0.70rem;
+
+        opacity:
+            0.95;
+
+        white-space:
+            nowrap;
+
+        overflow:
+            hidden;
+
+        text-overflow:
+            ellipsis;
+
+        margin-bottom:
+            2px;
+
+    }
+
+
+
+    /*
+    PROFISSIONAL
+    */
+
+    .evento-profissional {
+
+        font-size:
+            0.68rem;
+
+        opacity:
+            0.85;
+
+        white-space:
+            nowrap;
+
+        overflow:
+            hidden;
+
+        text-overflow:
+            ellipsis;
+
+    }
+
+
+
+    /*
+    REMOVER FUNDO PADRÃO DO FULLCALENDAR
+    */
+
+    .fc-event {
+
+        border:
+            none !important;
+
+        background:
+            transparent !important;
+
+        padding:
+            0 !important;
+
+    }
+
+
+
+    .fc-event-main {
+
+        padding:
+            0 !important;
+
+    }
+
+
+
+    /*
+    CALENDÁRIO PREMIUM
+    */
+
+    .fc {
+
+        font-family:
+            inherit;
+
+    }
+
+
+
+    .fc-toolbar-title {
+
+        font-size:
+            1.35rem !important;
+
+        font-weight:
+            700;
+
+    }
+
+
+
+    .fc-button {
+
+        border:
+            none !important;
+
+        border-radius:
+            8px !important;
+
+        padding:
+            7px 12px !important;
+
+        font-weight:
+            500 !important;
+
+    }
+
+
+
+    .fc-button-primary {
+
+        background-color:
+            #6f42c1 !important;
+
+    }
+
+
+
+    .fc-button-primary:hover {
+
+        background-color:
+            #5a32a3 !important;
+
+    }
+
+
+
+    .fc-button-primary:disabled {
+
+        background-color:
+            #8e6bc4 !important;
+
+    }
+
+
+
+    .fc-day-today {
+
+        background-color:
+            rgba(111, 66, 193, 0.08) !important;
+
+    }
+
+
+
+    .fc-col-header-cell-cushion {
+
+        color:
+            #6f42c1;
+
+        font-weight:
+            600;
+
+        text-decoration:
+            none;
+
+    }
+
+
+
+    .fc-daygrid-day-number {
+
+        color:
+            #495057;
+
+        font-weight:
+            500;
+
+        text-decoration:
+            none;
+
+    }
+
+
+
+    /*
+    RESPONSIVIDADE
+    */
+
+    @media (
+        max-width: 768px
+    ) {
+
+        .fc-toolbar {
+
+            flex-direction:
+                column;
+
+            gap:
+                10px;
+
+        }
+
+
+        .fc-toolbar-chunk {
+
+            display:
+                flex;
+
+            justify-content:
+                center;
+
+        }
+
+
+        .evento-profissional {
+
+            display:
+                none;
+
+        }
+
+
+        .evento-servico {
+
+            font-size:
+                0.65rem;
+
+        }
+
+
+        .evento-paciente {
+
+            font-size:
+                0.75rem;
+
+        }
+
+    }
+
+
+</style>
+
+<!-- FULLCALENDAR JS -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js">
+</script>
+
+<script>
+
+
+document.addEventListener(
+
+    'DOMContentLoaded',
+
+    function(){
+
+
+
+        /*
+        ELEMENTO DO CALENDÁRIO
+        */
+
+
+        const calendarEl =
+
+            document.getElementById(
+                'calendar'
+            );
+
+
+
+        /*
+        CRIAÇÃO DO CALENDÁRIO
+        */
+
+
+        const calendar =
+
+            new FullCalendar.Calendar(
+
+                calendarEl,
+
+                {
+
+
+                    /*
+                   VISUAL INICIAL
+                    */
+
+
+                    initialView:
+
+                        'dayGridMonth',
+                        slotMinTime:
+    '07:00:00',
+
+slotMaxTime:
+    '21:00:00',
+
+slotDuration:
+    '00:30:00',
+
+slotLabelInterval:
+    '01:00:00',
+
+scrollTime:
+    '07:00:00',
+
+nowIndicator:
+    true,
+
+
+
+     /*       
+                    IDIOMA
+                    
+                    */
+
+
+                    locale:
+
+                        'pt-br',
+
+
+
+                    /*
+                    ==============================
+                    FUSO HORÁRIO
+                    ==============================
+                    */
+
+
+                    timeZone:
+
+                        'local',
+
+
+
+                    /*
+                    ==============================
+                    ALTURA
+                    ==============================
+                    */
+
+
+                    height:
+
+                        750,
+
+
+
+                    /*
+                    ==============================
+                    BARRA DE NAVEGAÇÃO
+                    ==============================
+                    */
+
+
+                    headerToolbar: {
+
+    left:
+        'prev,next today',
+
+    center:
+        'title',
+
+    right:
+        'dayGridMonth,timeGridWeek,timeGridDay'
+
+},
+
+buttonText: {
+
+    today:
+        'Hoje',
+
+    month:
+        'Mês',
+
+    week:
+        'Semana',
+
+    day:
+        'Dia'
+
+},
+
+
+
+                    /*
+                    ==============================
+                    EVENTOS
+                    ==============================
+                    */
+
+
+                    events:
+
+                        "{% url 'agendamentos:eventos' %}",
+
+
+
+                    /*
+                    ==============================
+                    CLIQUE NO EVENTO
+                    ==============================
+                    */
+
+
+                    eventClick:
+
+                    function(info){
+
+
+                        window.location.href =
+
+                            "/agendamentos/"
+
+                            +
+
+                            info.event.id
+
+                            +
+
+                            "/";
+
+
+                    },
+
+
+
+                    /*
+                    ==============================
+                    CLIQUE EM DATA/HORÁRIO
+                    ==============================
+                    */
+
+
+                    dateClick:
+
+                    function(info){
+
+
+                        const data =
+
+                            info.dateStr.substring(
+                                0,
+                                10
+                            );
+
+
+
+                        const hora =
+
+                            info.date
+                                .getHours()
+                                .toString()
+                                .padStart(
+                                    2,
+                                    "0"
+                                );
+
+
+
+                        const minuto =
+
+                            info.date
+                                .getMinutes()
+                                .toString()
+                                .padStart(
+                                    2,
+                                    "0"
+                                );
+
+
+
+                        const horario =
+
+                            `${hora}:${minuto}`;
+
+
+
+                        window.location.href =
+
+                            "{% url 'agendamentos:criar' %}"
+
+                            +
+
+                            "?data="
+
+                            +
+
+                            data
+
+                            +
+
+                            "&horario="
+
+                            +
+
+                            horario;
+
+
+                    },
+
+
+
+                    /*
+                    ==============================
+                    CARD PREMIUM DO EVENTO
+                    ==============================
+                    */
+
+
+                    eventContent:
+
+                    function(arg){
+
+
+                        const props =
+
+                            arg.event.extendedProps;
+
+
+
+                        const paciente =
+
+                            props.paciente
+
+                            ||
+
+                            "Paciente";
+
+
+
+                        const profissional =
+
+                            props.profissional
+
+                            ||
+
+                            "Profissional";
+
+
+
+                        const servico =
+
+                            props.servico
+
+                            ||
+
+                            "Serviço";
+
+
+
+                        const horario =
+
+                            props.horario
+
+                            ||
+
+                            "";
+
+
+
+                        const status =
+
+                            props.status
+
+                            ||
+
+                            "";
+
+
+
+                        /*
+                        ==========================
+                        CRIAR CARD
+                        ==========================
+                        */
+
+
+                        const container =
+
+                            document.createElement(
+                                "div"
+                            );
+
+
+
+                        container.className =
+
+                            "evento-card-premium";
+
+
+
+                        /*
+                        ==========================
+                        COR DO EVENTO
+                        ==========================
+                        */
+
+
+                        container.style.background =
+
+                            arg.event.backgroundColor;
+
+
+
+                        /*
+                        ==========================
+                        CONTEÚDO
+                        ==========================
+                        */
+
+
+                        container.innerHTML = `
+
+
+                            <div
+                                class="evento-topo"
+                            >
+
+
+                                <span
+                                    class="evento-horario"
+                                >
+
+                                    ${horario}
+
+                                </span>
+
+
+                                <span
+                                    class="evento-status"
+                                >
+
+                                    ${status}
+
+                                </span>
+
+
+                            </div>
+
+
+
+                            <div
+                                class="evento-paciente"
+                            >
+
+                                ${paciente}
+
+                            </div>
+
+
+
+                            <div
+                                class="evento-servico"
+                            >
+
+                                🩺 ${servico}
+
+                            </div>
+
+
+
+                            <div
+                                class="evento-profissional"
+                            >
+
+                                👨‍⚕️ ${profissional}
+
+                            </div>
+
+
+                        `;
+
+
+
+                        /*
+                        ==========================
+                        RETORNAR CARD
+                        ==========================
+                        */
+
+
+                        return {
+
+
+                            domNodes:
+
+                            [
+
+                                container
+
+                            ]
+
+
+                        };
+
+
+                    },
+
+
+
+                    /*
+                    ==============================
+                    INFORMAÇÕES DO EVENTO
+                    ==============================
+                    */
+
+
+                    eventDidMount:
+
+                    function(info){
+
+
+                        const props =
+
+                            info.event.extendedProps;
+
+
+
+                        const paciente =
+
+                            props.paciente
+
+                            ||
+
+                            "Paciente";
+
+
+
+                        const profissional =
+
+                            props.profissional
+
+                            ||
+
+                            "Profissional";
+
+
+
+                        const servico =
+
+                            props.servico
+
+                            ||
+
+                            "Serviço";
+
+
+
+                        const horario =
+
+                            props.horario
+
+                            ||
+
+                            "";
+
+
+
+                        const status =
+
+                            props.status
+
+                            ||
+
+                            "";
+
+
+
+                        /*
+                        ==========================
+                        TOOLTIP NATIVO
+                        ==========================
+                        */
+
+
+                        info.el.title =
+
+                            "Paciente: "
+
+                            +
+
+                            paciente
+
+                            +
+
+                            "\n"
+
+                            +
+
+                            "Profissional: "
+
+                            +
+
+                            profissional
+
+                            +
+
+                            "\n"
+
+                            +
+
+                            "Serviço: "
+
+                            +
+
+                            servico
+
+                            +
+
+                            "\n"
+
+                            +
+
+                            "Horário: "
+
+                            +
+
+                            horario
+
+                            +
+
+                            "\n"
+
+                            +
+
+                            "Status: "
+
+                            +
+
+                            status;
+
+
+                    }
+
+
+
+                }
+
+            );
+
+
+
+        /*
+        ==========================================
+        RENDERIZAR CALENDÁRIO
+        ==========================================
+        */
+
+
+        calendar.render();
+
+
+    }
+
+);
+
+
+</script>
+
+{% endblock %}

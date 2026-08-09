@@ -1,0 +1,513 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+
+    Detalhes do Agendamento
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container-fluid">
+
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+
+        <div>
+
+            <h1>
+
+                📅 Detalhes do Agendamento
+
+            </h1>
+
+            <p class="text-muted">
+
+                Informações do atendimento agendado.
+
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <a
+                href="{% url 'agendamentos:editar' agendamento.pk %}"
+                class="btn btn-warning"
+            >
+
+                ✏️ Editar
+
+            </a>
+
+
+            <a
+                href="{% url 'agendamentos:lista' %}"
+                class="btn btn-secondary"
+            >
+
+                Voltar
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="row g-4">
+
+
+        <div class="col-md-6">
+
+
+            <div class="card shadow-sm">
+
+
+                <div class="card-header">
+
+                    <strong>
+
+                        👤 Dados do paciente
+
+                    </strong>
+
+                </div>
+
+
+                <div class="card-body">
+
+
+                    <p>
+
+                        <strong>
+
+                            Paciente:
+
+                        </strong>
+
+                        {{ agendamento.paciente }}
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div class="col-md-6">
+
+
+            <div class="card shadow-sm">
+
+
+                <div class="card-header">
+
+                    <strong>
+
+                        👨‍⚕️ Profissional
+
+                    </strong>
+
+                </div>
+
+
+                <div class="card-body">
+
+
+                    <p>
+
+                        <strong>
+
+                            Profissional:
+
+                        </strong>
+
+                        {{ agendamento.profissional }}
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div class="col-md-6">
+
+
+            <div class="card shadow-sm">
+
+
+                <div class="card-header">
+
+                    <strong>
+
+                        🩺 Serviço
+
+                    </strong>
+
+                </div>
+
+
+                <div class="card-body">
+
+
+                    <p>
+
+                        <strong>
+
+                            Serviço:
+
+                        </strong>
+
+                        {{ agendamento.servico }}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+
+                            Valor:
+
+                        </strong>
+
+                        R$ {{ agendamento.valor|floatformat:2 }}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+
+                            Duração:
+
+                        </strong>
+
+                        {{ agendamento.duracao_minutos }} minutos
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div class="col-md-6">
+
+
+            <div class="card shadow-sm">
+
+
+                <div class="card-header">
+
+                    <strong>
+
+                        📅 Data e horário
+
+                    </strong>
+
+                </div>
+
+
+                <div class="card-body">
+
+
+                    <p>
+
+                        <strong>
+
+                            Data:
+
+                        </strong>
+
+                        {{ agendamento.data|date:"d/m/Y" }}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+
+                            Horário:
+
+                        </strong>
+
+                        {{ agendamento.horario|time:"H:i" }}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+
+                            Status:
+
+                        </strong>
+
+
+                        {% if agendamento.status == "AGENDADO" %}
+
+                            <span class="badge bg-primary">
+
+                                Agendado
+
+                            </span>
+
+                        {% elif agendamento.status == "CONFIRMADO" %}
+
+                            <span class="badge bg-info">
+
+                                Confirmado
+
+                            </span>
+
+                        {% elif agendamento.status == "REALIZADO" %}
+
+                            <span class="badge bg-success">
+
+                                Realizado
+
+                            </span>
+
+                        {% elif agendamento.status == "CANCELADO" %}
+
+                            <span class="badge bg-danger">
+
+                                Cancelado
+
+                            </span>
+
+                        {% elif agendamento.status == "FALTOU" %}
+
+                            <span class="badge bg-warning text-dark">
+
+                                Paciente faltou
+
+                            </span>
+
+                        {% endif %}
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    {% if agendamento.observacoes %}
+
+
+        <div class="card shadow-sm mt-4">
+
+
+            <div class="card-header">
+
+                <strong>
+
+                    📝 Observações
+
+                </strong>
+
+            </div>
+
+
+            <div class="card-body">
+
+                {{ agendamento.observacoes }}
+
+            </div>
+
+
+        </div>
+
+
+    {% endif %}
+
+<!-- AÇÕES DE STATUS -->
+
+{% if agendamento.status == "AGENDADO" %}
+
+<div class="card border-primary mt-4">
+
+    <div class="card-body">
+
+        <h5 class="text-primary">
+            📌 Ações do agendamento
+        </h5>
+
+
+        <form
+            method="post"
+            action="{% url 'agendamentos:confirmar' agendamento.pk %}"
+            class="d-inline"
+        >
+
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="btn btn-info"
+            >
+                ✅ Confirmar agendamento
+            </button>
+
+        </form>
+
+
+    </div>
+
+</div>
+
+
+{% elif agendamento.status == "CONFIRMADO" %}
+
+
+<div class="card border-success mt-4">
+
+    <div class="card-body">
+
+
+        <h5 class="text-success">
+            Atendimento
+        </h5>
+
+
+        <form
+            method="post"
+            action="{% url 'agendamentos:realizar' agendamento.pk %}"
+            class="d-inline"
+        >
+
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="btn btn-success"
+            >
+                ✔ Marcar como realizado
+            </button>
+
+        </form>
+
+
+
+        <form
+            method="post"
+            action="{% url 'agendamentos:faltou' agendamento.pk %}"
+            class="d-inline"
+        >
+
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="btn btn-warning"
+            >
+                ⚠ Paciente faltou
+            </button>
+
+        </form>
+
+
+    </div>
+
+</div>
+
+
+{% endif %}
+
+    {% if agendamento.status != "CANCELADO" %}
+
+
+        <div class="card border-danger mt-4">
+
+
+            <div class="card-body">
+
+
+                <h5 class="text-danger">
+
+                    Cancelar agendamento
+
+                </h5>
+
+
+                <p>
+
+                    O agendamento será marcado como
+                    cancelado e continuará no histórico
+                    da clínica.
+
+                </p>
+
+
+                <form
+                    method="post"
+                    action="{% url 'agendamentos:cancelar' agendamento.pk %}"
+                >
+
+
+                    {% csrf_token %}
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-danger"
+                        onclick="return confirm('Tem certeza que deseja cancelar este agendamento?')"
+                    >
+
+                        ❌ Cancelar agendamento
+
+                    </button>
+
+
+                </form>
+
+
+            </div>
+
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+{% endblock %}

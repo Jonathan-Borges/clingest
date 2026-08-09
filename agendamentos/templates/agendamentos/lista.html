@@ -1,0 +1,770 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+
+Agendamentos
+
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+<!-- CABEÇALHO -->
+
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+
+    <div>
+
+        <h1>
+
+            📅 Agendamentos
+
+        </h1>
+
+        <p class="text-muted">
+
+            Gerencie os agendamentos da clínica.
+
+        </p>
+
+    </div>
+
+
+    <a
+        href="{% url 'agendamentos:criar' %}"
+        class="btn btn-primary"
+    >
+
+        + Novo agendamento
+
+    </a>
+
+
+</div>
+
+
+
+<!-- FILTROS E PESQUISA -->
+
+
+<div class="card shadow-sm mb-4">
+
+
+    <div class="card-body">
+
+
+        <h5 class="card-title mb-3">
+
+            🔎 Pesquisar e filtrar agendamentos
+
+        </h5>
+
+
+        <form
+            method="get"
+            class="row g-3"
+        >
+
+
+            <!-- PESQUISA POR PACIENTE -->
+
+
+            <div class="col-md-4">
+
+
+                <label
+                    for="busca"
+                    class="form-label"
+                >
+
+                    🔎 Pesquisar paciente
+
+                </label>
+
+
+                <input
+                    type="text"
+                    id="busca"
+                    name="busca"
+                    class="form-control"
+                    placeholder="Nome, CPF ou telefone"
+                    value="{{ busca|default:'' }}"
+                >
+
+
+            </div>
+
+
+
+            <!-- FILTRO POR DATA -->
+
+
+            <div class="col-md-3">
+
+
+                <label
+                    for="data"
+                    class="form-label"
+                >
+
+                    📅 Data
+
+                </label>
+
+
+                <input
+                    type="date"
+                    id="data"
+                    name="data"
+                    class="form-control"
+                    value="{{ data_filtro|default:'' }}"
+                >
+
+
+            </div>
+
+
+
+            <!-- FILTRO POR PROFISSIONAL -->
+
+
+            <div class="col-md-3">
+
+
+                <label
+                    for="profissional"
+                    class="form-label"
+                >
+
+                    👨‍⚕️ Profissional
+
+                </label>
+
+
+                <select
+                    id="profissional"
+                    name="profissional"
+                    class="form-select"
+                >
+
+
+                    <option value="">
+
+                        Todos os profissionais
+
+                    </option>
+
+
+                    {% for profissional in profissionais %}
+
+
+                        <option
+                            value="{{ profissional.pk }}"
+                            {% if profissional_filtro == profissional.pk|stringformat:"s" %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ profissional.nome_completo }}
+
+                        </option>
+
+
+                    {% endfor %}
+
+
+                </select>
+
+
+            </div>
+
+
+
+            <!-- FILTRO POR STATUS -->
+
+
+            <div class="col-md-2">
+
+
+                <label
+                    for="status"
+                    class="form-label"
+                >
+
+                    📌 Status
+
+                </label>
+
+
+                <select
+                    id="status"
+                    name="status"
+                    class="form-select"
+                >
+
+
+                    <option value="">
+
+                        Todos
+
+                    </option>
+
+
+                    {% for valor, nome in status_choices %}
+
+
+                        <option
+                            value="{{ valor }}"
+                            {% if status_filtro == valor %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ nome }}
+
+                        </option>
+
+
+                    {% endfor %}
+
+
+                </select>
+
+
+            </div>
+
+
+
+            <!-- BOTÕES -->
+
+
+            <div class="col-12">
+
+
+                <div class="d-flex gap-2">
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+
+                        🔎 Pesquisar
+
+                    </button>
+
+
+                    <a
+                        href="{% url 'agendamentos:lista' %}"
+                        class="btn btn-outline-secondary"
+                    >
+
+                        🔄 Limpar filtros
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- LISTA DE AGENDAMENTOS -->
+
+
+<div class="card shadow-sm">
+
+
+    <div class="card-body">
+
+
+        {% if agendamentos %}
+
+
+            <div class="table-responsive">
+
+
+                <table class="table table-hover align-middle">
+
+
+                    <thead>
+
+
+                        <tr>
+
+
+                            <th>
+
+                                Data
+
+                            </th>
+
+
+                            <th>
+
+                                Horário
+
+                            </th>
+
+
+                            <th>
+
+                                Paciente
+
+                            </th>
+
+
+                            <th>
+
+                                Profissional
+
+                            </th>
+
+
+                            <th>
+
+                                Serviço
+
+                            </th>
+
+
+                            <th>
+
+                                Valor
+
+                            </th>
+
+
+                            <th>
+
+                                Status
+
+                            </th>
+
+
+                            <th>
+
+                                Ações
+
+                            </th>
+
+
+                        </tr>
+
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        {% for agendamento in agendamentos %}
+
+
+                            <tr>
+
+
+                                <!-- DATA -->
+
+
+                                <td>
+
+                                    {{ agendamento.data|date:"d/m/Y" }}
+
+                                </td>
+
+
+
+                                <!-- HORÁRIO -->
+
+
+                                <td>
+
+                                    <strong>
+
+                                        {{ agendamento.horario|time:"H:i" }}
+
+                                    </strong>
+
+                                </td>
+
+
+
+                                <!-- PACIENTE -->
+
+
+                                <td>
+
+                                    <strong>
+
+                                        {{ agendamento.paciente.nome_completo }}
+
+                                    </strong>
+
+
+                                    <br>
+
+
+                                    <small class="text-muted">
+
+                                        CPF:
+
+                                        {{ agendamento.paciente.cpf }}
+
+                                    </small>
+
+
+                                </td>
+
+
+
+                                <!-- PROFISSIONAL -->
+
+
+                                <td>
+
+                                    {{ agendamento.profissional.nome_completo }}
+
+                                </td>
+
+
+
+                                <!-- SERVIÇO -->
+
+
+                                <td>
+
+                                    {{ agendamento.servico.nome }}
+
+                                </td>
+
+
+
+                                <!-- VALOR -->
+
+
+                                <td>
+
+                                    <strong>
+
+                                        R$
+
+                                        {{ agendamento.valor|floatformat:2 }}
+
+                                    </strong>
+
+                                </td>
+
+
+
+                                <!-- STATUS -->
+
+
+                                <td>
+
+
+                                    {% if agendamento.status == "AGENDADO" %}
+
+
+                                        <span class="badge bg-primary">
+
+                                            Agendado
+
+                                        </span>
+
+
+                                    {% elif agendamento.status == "CONFIRMADO" %}
+
+
+                                        <span class="badge bg-info">
+
+                                            Confirmado
+
+                                        </span>
+
+
+                                    {% elif agendamento.status == "REALIZADO" %}
+
+
+                                        <span class="badge bg-success">
+
+                                            Realizado
+
+                                        </span>
+
+
+                                    {% elif agendamento.status == "CANCELADO" %}
+
+
+                                        <span class="badge bg-danger">
+
+                                            Cancelado
+
+                                        </span>
+
+
+                                    {% elif agendamento.status == "FALTOU" %}
+
+
+                                        <span class="badge bg-warning text-dark">
+
+                                            Paciente faltou
+
+                                        </span>
+
+
+                                    {% endif %}
+
+
+                                </td>
+
+
+
+                                <!-- AÇÕES -->
+
+
+                                <td>
+
+                                        
+                                    <div class="d-flex gap-1">
+
+{% if agendamento.status != "REALIZADO" %}
+
+<form
+    method="post"
+    action="{% url 'agendamentos:finalizar' agendamento.pk %}"
+    class="d-inline"
+>
+
+    {% csrf_token %}
+
+    <button
+        type="submit"
+        class="btn btn-sm btn-outline-success"
+        title="Finalizar atendimento"
+    >
+
+        ✅
+
+    </button>
+
+
+</form>
+
+{% endif %}
+                                        <a
+                                            href="{% url 'agendamentos:detalhe' agendamento.pk %}"
+                                            class="btn btn-sm btn-outline-primary"
+                                            title="Ver detalhes"
+                                        >
+
+                                            👁️
+
+                                        </a>
+
+
+                                        <a
+                                            href="{% url 'agendamentos:editar' agendamento.pk %}"
+                                            class="btn btn-sm btn-outline-warning"
+                                            title="Editar"
+                                        >
+
+                                            ✏️
+
+                                        </a>
+
+
+                                    </div>
+
+
+                                </td>
+
+
+                            </tr>
+
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        {% else %}
+
+
+            <!-- NENHUM RESULTADO -->
+
+
+            <div class="text-center py-5">
+
+
+                <div class="mb-3">
+
+                    📅
+
+                </div>
+
+
+                <h4>
+
+                    Nenhum agendamento encontrado
+
+                </h4>
+
+
+                {% if busca or data_filtro or profissional_filtro or status_filtro %}
+
+
+                    <p class="text-muted">
+
+                        Nenhum agendamento corresponde aos filtros selecionados.
+
+                    </p>
+
+
+                    <a
+                        href="{% url 'agendamentos:lista' %}"
+                        class="btn btn-outline-secondary"
+                    >
+
+                        🔄 Limpar filtros
+
+                    </a>
+
+
+                {% else %}
+
+
+                    <p class="text-muted">
+
+                        Ainda não existem agendamentos cadastrados.
+
+                    </p>
+
+
+                    <a
+                        href="{% url 'agendamentos:criar' %}"
+                        class="btn btn-primary"
+                    >
+
+                        + Criar primeiro agendamento
+
+                    </a>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+
+</div>
+
+{% if agendamentos.has_other_pages %}
+
+<nav class="mt-4">
+
+    <ul class="pagination justify-content-center">
+
+        {% if agendamentos.has_previous %}
+
+        <li class="page-item">
+
+            <a
+                class="page-link"
+                href="?page={{ agendamentos.previous_page_number }}&busca={{ busca }}&data={{ data_filtro }}&profissional={{ profissional_filtro }}&status={{ status_filtro }}"
+            >
+                Anterior
+            </a>
+
+        </li>
+
+        {% endif %}
+
+        {% for numero in agendamentos.paginator.page_range %}
+
+            {% if numero == agendamentos.number %}
+
+                <li class="page-item active">
+
+                    <span class="page-link">
+
+                        {{ numero }}
+
+                    </span>
+
+                </li>
+
+            {% else %}
+
+                <li class="page-item">
+
+                    <a
+                        class="page-link"
+                        href="?page={{ numero }}&busca={{ busca }}&data={{ data_filtro }}&profissional={{ profissional_filtro }}&status={{ status_filtro }}"
+                    >
+
+                        {{ numero }}
+
+                    </a>
+
+                </li>
+
+            {% endif %}
+
+        {% endfor %}
+
+        {% if agendamentos.has_next %}
+
+        <li class="page-item">
+
+            <a
+                class="page-link"
+                href="?page={{ agendamentos.next_page_number }}&busca={{ busca }}&data={{ data_filtro }}&profissional={{ profissional_filtro }}&status={{ status_filtro }}"
+            >
+                Próxima
+            </a>
+
+        </li>
+
+        {% endif %}
+
+    </ul>
+
+</nav>
+
+{% endif %}
+
+{% endblock %}

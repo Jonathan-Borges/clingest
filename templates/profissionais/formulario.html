@@ -1,0 +1,556 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+
+{% if profissional %}
+
+    Editar profissional
+
+{% else %}
+
+    Novo profissional
+
+{% endif %}
+
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-2">
+
+
+<!-- CABEÇALHO -->
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+
+    <div class="d-flex align-items-center gap-3">
+
+
+        <div
+            class="rounded-3 d-flex align-items-center justify-content-center"
+            style="
+                width: 58px;
+                height: 58px;
+                background: rgba(111, 66, 193, 0.10);
+                color: #6f42c1;
+                font-size: 26px;
+            "
+        >
+
+            👨‍⚕️
+
+        </div>
+
+
+        <div>
+
+
+            <h2 class="fw-bold mb-1">
+
+
+                {% if profissional %}
+
+                    Editar profissional
+
+                {% else %}
+
+                    Novo profissional
+
+                {% endif %}
+
+
+            </h2>
+
+
+            <p class="text-muted mb-0">
+
+
+                {% if profissional %}
+
+                    Atualize os dados cadastrais do profissional.
+
+                {% else %}
+
+                    Cadastre um novo profissional na clínica.
+
+                {% endif %}
+
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+    <a
+        href="{% url 'profissionais:lista' %}"
+        class="btn btn-outline-secondary px-4"
+    >
+
+        ← Voltar
+
+    </a>
+
+
+</div>
+
+
+
+<!-- FORMULÁRIO -->
+
+<div class="row justify-content-center">
+
+
+    <div class="col-xl-9">
+
+
+        <div class="card border-0 shadow-sm">
+
+
+            <div class="card-header bg-white border-0 p-4">
+
+
+                <h5 class="fw-bold mb-1">
+
+                    📋 Dados profissionais
+
+                </h5>
+
+
+                <small class="text-muted">
+
+                    Preencha as informações abaixo para manter
+                    o cadastro atualizado.
+
+                </small>
+
+
+            </div>
+
+
+            <div class="card-body p-4">
+
+
+                {% if form.non_field_errors %}
+
+
+                    <div class="alert alert-danger">
+
+
+                        {% for error in form.non_field_errors %}
+
+                            <div>
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                {% endif %}
+
+
+
+                <form method="post">
+
+
+                    {% csrf_token %}
+
+
+
+                    <!-- DADOS PESSOAIS -->
+
+                    <div class="mb-4">
+
+
+                        <h6
+                            class="fw-bold pb-2 mb-4"
+                            style="
+                                color: #6f42c1;
+                                border-bottom: 1px solid rgba(111, 66, 193, 0.15);
+                            "
+                        >
+
+                            👤 Informações pessoais
+
+                        </h6>
+
+
+                        <div class="row g-4">
+
+
+                            <!-- NOME -->
+
+                            <div class="col-md-8">
+
+
+                                <label
+                                    for="{{ form.nome_completo.id_for_label }}"
+                                    class="form-label fw-semibold"
+                                >
+
+                                    Nome completo
+
+                                    <span class="text-danger">
+
+                                        *
+
+                                    </span>
+
+                                </label>
+
+
+                                {{ form.nome_completo }}
+
+
+                                {% if form.nome_completo.errors %}
+
+
+                                    <div class="text-danger small mt-1">
+
+
+                                        {% for error in form.nome_completo.errors %}
+
+                                            {{ error }}
+
+                                        {% endfor %}
+
+
+                                    </div>
+
+
+                                {% endif %}
+
+
+                            </div>
+
+
+
+                            <!-- CPF -->
+
+                            <div class="col-md-4">
+
+
+                                <label
+                                    for="{{ form.cpf.id_for_label }}"
+                                    class="form-label fw-semibold"
+                                >
+
+                                    CPF
+
+                                    <span class="text-danger">
+
+                                        *
+
+                                    </span>
+
+                                </label>
+
+
+                                {{ form.cpf }}
+
+
+                                {% if form.cpf.errors %}
+
+
+                                    <div class="text-danger small mt-1">
+
+
+                                        {% for error in form.cpf.errors %}
+
+                                            {{ error }}
+
+                                        {% endfor %}
+
+
+                                    </div>
+
+
+                                {% endif %}
+
+
+                            </div>
+
+
+
+                            <!-- ESPECIALIDADE -->
+
+                            <div class="col-md-6">
+
+
+                                <label
+                                    for="{{ form.especialidade.id_for_label }}"
+                                    class="form-label fw-semibold"
+                                >
+
+                                    Especialidade
+
+                                    <span class="text-danger">
+
+                                        *
+
+                                    </span>
+
+                                </label>
+
+
+                                {{ form.especialidade }}
+
+
+                                {% if form.especialidade.errors %}
+
+
+                                    <div class="text-danger small mt-1">
+
+
+                                        {% for error in form.especialidade.errors %}
+
+                                            {{ error }}
+
+                                        {% endfor %}
+
+
+                                    </div>
+
+
+                                {% endif %}
+
+
+                            </div>
+
+
+
+                            <!-- REGISTRO -->
+
+                            <div class="col-md-6">
+
+
+                                <label
+                                    for="{{ form.registro_profissional.id_for_label }}"
+                                    class="form-label fw-semibold"
+                                >
+
+                                    Registro profissional
+
+                                </label>
+
+
+                                {{ form.registro_profissional }}
+
+
+                                <div class="form-text">
+
+                                    Ex.: CRM, CRP, CREFITO, CRO etc.
+
+                                </div>
+
+
+                                {% if form.registro_profissional.errors %}
+
+
+                                    <div class="text-danger small mt-1">
+
+
+                                        {% for error in form.registro_profissional.errors %}
+
+                                            {{ error }}
+
+                                        {% endfor %}
+
+
+                                    </div>
+
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- CONTATO -->
+
+                    <div class="mb-4">
+
+
+                        <h6
+                            class="fw-bold pb-2 mb-4"
+                            style="
+                                color: #6f42c1;
+                                border-bottom: 1px solid rgba(111, 66, 193, 0.15);
+                            "
+                        >
+
+                            📞 Informações de contato
+
+                        </h6>
+
+
+                        <div class="row g-4">
+
+
+                            <!-- TELEFONE -->
+
+                            <div class="col-md-6">
+
+
+                                <label
+                                    for="{{ form.telefone.id_for_label }}"
+                                    class="form-label fw-semibold"
+                                >
+
+                                    Telefone
+
+                                </label>
+
+
+                                {{ form.telefone }}
+
+
+                                {% if form.telefone.errors %}
+
+
+                                    <div class="text-danger small mt-1">
+
+
+                                        {% for error in form.telefone.errors %}
+
+                                            {{ error }}
+
+                                        {% endfor %}
+
+
+                                    </div>
+
+
+                                {% endif %}
+
+
+                            </div>
+
+
+
+                            <!-- EMAIL -->
+
+                            <div class="col-md-6">
+
+
+                                <label
+                                    for="{{ form.email.id_for_label }}"
+                                    class="form-label fw-semibold"
+                                >
+
+                                    E-mail
+
+                                </label>
+
+
+                                {{ form.email }}
+
+
+                                {% if form.email.errors %}
+
+
+                                    <div class="text-danger small mt-1">
+
+
+                                        {% for error in form.email.errors %}
+
+                                            {{ error }}
+
+                                        {% endfor %}
+
+
+                                    </div>
+
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- RODAPÉ -->
+
+                    <div
+                        class="d-flex flex-column flex-md-row justify-content-end gap-2 pt-4"
+                        style="
+                            border-top: 1px solid #eee;
+                        "
+                    >
+
+
+                        <a
+                            href="{% url 'profissionais:lista' %}"
+                            class="btn btn-outline-secondary px-4"
+                        >
+
+                            Cancelar
+
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary px-5"
+                        >
+
+
+                            {% if profissional %}
+
+                                💾 Salvar alterações
+
+                            {% else %}
+
+                                + Cadastrar profissional
+
+                            {% endif %}
+
+
+                        </button>
+
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+</div>
+
+{% endblock %}

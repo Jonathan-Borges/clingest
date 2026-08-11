@@ -20,4 +20,7 @@ urlpatterns = [
     path("financeiro/", include("financeiro.urls")),
 
     path("", lambda request: redirect("login")),
+    
+    path("atendimentos/",include("atendimentos.urls")),
+
 ]

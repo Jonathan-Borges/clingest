@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "servicos",
     "financeiro",
     "agendamentos.apps.AgendamentosConfig",
+    "atendimentos",
 ]
 
 MIDDLEWARE = [
